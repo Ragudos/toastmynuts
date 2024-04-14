@@ -1,4 +1,5 @@
 /**
+ * This is used internally and is not available as an external function.
  * Gets the config from
  *
  * ```html

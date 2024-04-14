@@ -1,13 +1,7 @@
 /**
  * @global
  *
- * The position of the toast
- *
- * @default
- *
- * ```json
- * { "x": "middle", "y": "top" }
- * ```
+ * @default  { "x": "middle", "y": "top" }
  *
  * @typedef {Object} ToastPosition
  * @property {"left" | "middle" | "right"} x - The horizontal position of the toast.
