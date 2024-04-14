@@ -12,7 +12,9 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v3
             - name: Build documentation
-              run: npm run docs
+              uses: andstor/jsdoc-action@v1.2.1
+              with:
+                config_file: ./jsdoc.config.json
     deploy:
         permissions:
             contents: read
