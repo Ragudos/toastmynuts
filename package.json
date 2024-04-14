@@ -10,6 +10,13 @@
     "build": "node esbuild.config.mjs",
     "docs": "jsdoc -c jsdoc.config.json src/index.umd.js src/index.esm.js src/types.js"
   },
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/Ragudos/toastmynuts"
+  },
+  "bugs": {
+    "url": "https://github.com/Ragudos/toastmynuts/issues"
+  },
   "keywords": [
     "Notification",
     "Toast",
