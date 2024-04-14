@@ -1,0 +1,30 @@
+{
+  "name": "toastmynuts",
+  "version": "1.0.0",
+  "description": "A plug 'n use notification library for the browser.",
+  "exports": {
+    ".": "./dist/index.esm.js",
+    "./styles.css": "./dist/styles.css"
+  },
+  "scripts": {
+    "build": "node esbuild.config.mjs",
+    "docs": "jsdoc -c jsdoc.config.json src/index.umd.js src/index.esm.js src/types.js"
+  },
+  "keywords": [
+    "Notification",
+    "Toast",
+    "Browser"
+  ],
+  "author": {
+    "email": "workemailaaronragudos@gmail.com",
+    "name": "Aaron"
+  },
+  "funding": {
+    "type": "individual",
+    "url": "https://buymeacoffee.com/programmers_sanctuary"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "esbuild": "^0.20.2"
+  }
+}

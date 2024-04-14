@@ -1,0 +1,18 @@
+{
+    "opts": {
+        "encoding": "utf8",
+        "readme": "README.md",
+        "destination": "docs"
+    },
+    "templates": {
+        "highlightTutorialCode": true,
+        "cleverLinks": false
+    },
+    "plugins": [
+        "plugins/markdown"
+    ],
+    "markdown":{
+        "parser": "gfm",
+        "hardwrap": false
+    }
+}
