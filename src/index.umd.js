@@ -1,3 +1,6 @@
+//@ts-check
+import { TOAST_CONTAINER_ID, Toaster } from "./toaster";
+
 /**
  * This is used internally and is not available as an external function.
  * Gets the config from
@@ -29,11 +32,52 @@ function getConfig() {
     return undefined;
 }
 
-function initializeToast() {
-    const config = getConfig();
-    const position = config.position;
-}
+const config = getConfig();
 
-initializeToast();
+/**
+ * @type {ToastPosition}
+ */
+const position = config?.position ? config.position : { x: "middle", y: "top" };
 
-window.ToastMyNuts = Object.freeze({});
+const toastContainer = document.createElement("ol");
+toastContainer.id = TOAST_CONTAINER_ID;
+toastContainer.setAttribute("aria-label", "Notifications (Alt + T");
+toastContainer.setAttribute("data-position-x", position.x);
+toastContainer.setAttribute("data-position-y", position.y);
+
+document.body.appendChild(toastContainer);
+
+const toast = Toaster.getInstance(config);
+
+// @ts-ignore
+window.ToastMyNuts = Object.freeze({
+    /**
+     * @param {string} message
+     * @param {ToastType} [type]
+     */
+    create: (message, type) => {
+        if (config && config.ignoreErrors) {
+            try {
+                toast.addToast(message, type);
+            } catch (error) {
+                console.error(error);
+            }
+        } else {
+            toast.addToast(message, type);
+        }
+    },
+    /**
+     * @param {number} toastIdx
+     */
+    remove: (toastIdx) => {
+        if (config && config.ignoreErrors) {
+            try {
+                toast.removeToast(toastIdx);
+            } catch (error) {
+                console.error(error);
+            }
+        } else {
+            toast.removeToast(toastIdx);
+        }
+    }
+});
