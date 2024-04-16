@@ -1,6 +1,11 @@
-#__toastmynuts__wrapper {
+#__toastmynuts__wrapper,
+#__toastmynuts__wrapper * {
     box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
 
+#__toastmynuts__wrapper {
     --_gap: 16px;
 
     position: fixed;
@@ -82,7 +87,10 @@
 
     position: relative;
 
-    will-change: height, padding-block;
+    will-change: height;
+    transition-property: height;
+    transition-duration: var(--_toastmynuts-td, 350ms);
+    transition-timing-function: ease;
 
     color: var(--_toastmynuts-fg, var(--_toastmynuts-default-fg));
     background-color: var(--_toastmynuts-bg, var(--_toastmynuts-default-bg));
@@ -160,10 +168,7 @@
 }
 
 #__toastmynuts__[data-expanded="false"] .__toastmynuts__toast:not([data-front-toast="true"]) > div {
-    padding-block: 0;
     height: var(--_front-toast-height, auto);
-
-    transition-duration: 0ms;
 }
 
 #__toastmynuts__ .__toastmynuts__toast[data-toast-state="entering"],

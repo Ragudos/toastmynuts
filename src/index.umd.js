@@ -15,7 +15,7 @@ import { Toaster } from "./toaster";
  * @returns {ToastConfig | undefined} The config object.
  */
 function getConfig() {
-    const metaTag = document.querySelector("meta[name=\"toastmynuts:config\"]");
+    const metaTag = document.querySelector("meta[name='toastmynuts:config']");
 
     if (!metaTag) {
         return undefined;

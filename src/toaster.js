@@ -337,6 +337,7 @@ export class Toaster {
             if (this._toasts.length - i <= maxVisibleToasts + 1) {
                 if (toastElement.getAttribute("data-toast-state") === "hidden") {
                     toastElement.removeAttribute("data-toast-state");
+                    toastElement.removeAttribute("aria-hidden");
                 }
             }
         }
@@ -380,6 +381,7 @@ export class Toaster {
             if (this._toasts.length - i >= maxVisibleToasts) {
                 if (toastElement.getAttribute("data-toast-state") !== "closing") {
                     toastElement.setAttribute("data-toast-state", "hidden");
+                    toastElement.setAttribute("aria-hidden", "true");
                 }
             }
         }
@@ -405,31 +407,8 @@ export class Toaster {
             toastContainer.setAttribute("data-position-y", Toaster._config?.position?.y || TOAST_DEFAULT_POSITION.y);
             toastContainer.setAttribute("data-expanded", "false");
 
-            Toaster._toastContainerMouseEnterListener = () => {
-                if (toastContainer.getAttribute("data-did-toggle-expansion") === "true") {
-                    return;
-                }
-
-                if (Toaster._mouseLeaveEnterListenerDebouncer) {
-                    clearTimeout(Toaster._mouseLeaveEnterListenerDebouncer);
-                }
-
-                toastContainer.setAttribute("data-expanded", "true");
-            }
-
-            Toaster._toastContainerMouseLeaveListener = () => {
-                // Add a debounce to prevent flickering
-                Toaster._mouseLeaveEnterListenerDebouncer = setTimeout(() => {
-                    if (toastContainer.getAttribute("data-did-toggle-expansion") === "true") {
-                        return;
-                    }
-
-                    toastContainer.setAttribute("data-expanded", "false");
-                }, 50);
-            };
-
-            Toaster._toastContainerKeyDownListener = (e) => {
-                if (e.altKey && e.code === "KeyT") {
+            if (Toaster._config?.stackable === false) {
+                Toaster._toastContainerMouseEnterListener = () => {
                     if (toastContainer.getAttribute("data-did-toggle-expansion") === "true") {
                         return;
                     }
@@ -438,21 +417,46 @@ export class Toaster {
                         clearTimeout(Toaster._mouseLeaveEnterListenerDebouncer);
                     }
 
-                    toastContainer.setAttribute("data-expanded", toastContainer.getAttribute("data-expanded") === "true" ? "false" : "true");
-                    toastContainer.setAttribute("data-did-toggle-expansion", "true");
+                    toastContainer.setAttribute("data-expanded", "true");
                 }
-            };
 
-            Toaster._toastContainerKeyUpListener = (e) => {
-                if (e.code === "KeyT") {
-                    toastContainer.setAttribute("data-did-toggle-expansion", "false");
-                }
-            };
+                Toaster._toastContainerMouseLeaveListener = () => {
+                    // Add a debounce to prevent flickering
+                    Toaster._mouseLeaveEnterListenerDebouncer = setTimeout(() => {
+                        if (toastContainer.getAttribute("data-did-toggle-expansion") === "true") {
+                            return;
+                        }
 
-            toastContainer.addEventListener("pointerenter", Toaster._toastContainerMouseEnterListener);
-            toastContainer.addEventListener("pointerleave", Toaster._toastContainerMouseLeaveListener);
-            window.addEventListener("keydown", Toaster._toastContainerKeyDownListener);
-            window.addEventListener("keyup", Toaster._toastContainerKeyUpListener);
+                        toastContainer.setAttribute("data-expanded", "false");
+                    }, 50);
+                };
+
+                Toaster._toastContainerKeyDownListener = (e) => {
+                    if (e.altKey && e.code === "KeyT") {
+                        if (toastContainer.getAttribute("data-did-toggle-expansion") === "true") {
+                            return;
+                        }
+
+                        if (Toaster._mouseLeaveEnterListenerDebouncer) {
+                            clearTimeout(Toaster._mouseLeaveEnterListenerDebouncer);
+                        }
+
+                        toastContainer.setAttribute("data-expanded", toastContainer.getAttribute("data-expanded") === "true" ? "false" : "true");
+                        toastContainer.setAttribute("data-did-toggle-expansion", "true");
+                    }
+                };
+
+                Toaster._toastContainerKeyUpListener = (e) => {
+                    if (e.code === "KeyT") {
+                        toastContainer.setAttribute("data-did-toggle-expansion", "false");
+                    }
+                };
+
+                toastContainer.addEventListener("pointerenter", Toaster._toastContainerMouseEnterListener);
+                toastContainer.addEventListener("pointerleave", Toaster._toastContainerMouseLeaveListener);
+                window.addEventListener("keydown", Toaster._toastContainerKeyDownListener);
+                window.addEventListener("keyup", Toaster._toastContainerKeyUpListener);
+            }
 
             toastWrapper.appendChild(toastContainer);
             document.body.appendChild(toastWrapper);

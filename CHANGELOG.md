@@ -18,3 +18,8 @@
 
 - Fix flickering when pointer enters the outermost part of toast
 - Fix mouseenter and mouseleave interfering with key shortcut (Alt + T).
+
+# v1.0.5
+
+- Change box-sizing to border-box to not include padding in toast's height.
+- Add stackable config option

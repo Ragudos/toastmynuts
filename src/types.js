@@ -30,6 +30,10 @@
 *  // Code that may throw an error
 * } catch (_error) {}
 * ```
+* @property {boolean} stackable
+* Whether or not toasts should stack on top of each other.
+* By default, toasts will stack on top of each other and can be expanded.
+* If this is set to false, toasts will not be stacked.
 */
 
 /**
