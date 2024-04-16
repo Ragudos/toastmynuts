@@ -1,6 +1,6 @@
 {
   "name": "toastmynuts",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A plug 'n use notification library for the browser.",
   "exports": {
     ".": "./dist/index.esm.js",
