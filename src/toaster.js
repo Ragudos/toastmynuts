@@ -49,6 +49,18 @@ export class Toaster {
 
     /**
      * @private
+     * @type {((evt: KeyboardEvent) => void) | undefined}
+     */
+    static _toastContainerKeyDownListener;
+
+    /**
+     * @private
+     * @type {((evt: KeyboardEvent) => void) | undefined}
+     */
+    static _toastContainerKeyUpListener;
+
+    /**
+     * @private
      */
     constructor() {
         this._toasts = [];
@@ -219,6 +231,14 @@ export class Toaster {
                     toastContainer?.removeEventListener("pointerleave", Toaster._toastContainerMouseLeaveListener);
                 }
 
+                if (Toaster._toastContainerKeyDownListener) {
+                    window.removeEventListener("keydown", Toaster._toastContainerKeyDownListener);
+                }
+
+                if (Toaster._toastContainerKeyUpListener) {
+                    window.removeEventListener("keyup", Toaster._toastContainerKeyUpListener);
+                }
+
                 toastWrapper?.remove();
             }
 
@@ -370,8 +390,27 @@ export class Toaster {
                 toastContainer.setAttribute("data-expanded", "false");
             };
 
+            Toaster._toastContainerKeyDownListener = (e) => {
+                if (e.altKey && e.code === "KeyT") {
+                    if (toastContainer.getAttribute("data-did-toggle-expansion") === "true") {
+                        return;
+                    }
+
+                    toastContainer.setAttribute("data-expanded", toastContainer.getAttribute("data-expanded") === "true" ? "false" : "true");
+                    toastContainer.setAttribute("data-did-toggle-expansion", "true");
+                }
+            };
+
+            Toaster._toastContainerKeyUpListener = (e) => {
+                if (e.code === "KeyT") {
+                    toastContainer.setAttribute("data-did-toggle-expansion", "false");
+                }
+            };
+
             toastContainer.addEventListener("pointerenter", Toaster._toastContainerMouseEnterListener);
             toastContainer.addEventListener("pointerleave", Toaster._toastContainerMouseLeaveListener);
+            window.addEventListener("keydown", Toaster._toastContainerKeyDownListener);
+            window.addEventListener("keyup", Toaster._toastContainerKeyUpListener);
 
             toastWrapper.appendChild(toastContainer);
             document.body.appendChild(toastWrapper);
