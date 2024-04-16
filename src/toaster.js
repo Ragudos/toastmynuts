@@ -61,6 +61,12 @@ export class Toaster {
 
     /**
      * @private
+     * @type {number | undefined}
+     */
+    static _mouseLeaveEnterListenerDebouncer;
+
+    /**
+     * @private
      */
     constructor() {
         this._toasts = [];
@@ -400,17 +406,36 @@ export class Toaster {
             toastContainer.setAttribute("data-expanded", "false");
 
             Toaster._toastContainerMouseEnterListener = () => {
+                if (toastContainer.getAttribute("data-did-toggle-expansion") === "true") {
+                    return;
+                }
+
+                if (Toaster._mouseLeaveEnterListenerDebouncer) {
+                    clearTimeout(Toaster._mouseLeaveEnterListenerDebouncer);
+                }
+
                 toastContainer.setAttribute("data-expanded", "true");
             }
 
             Toaster._toastContainerMouseLeaveListener = () => {
-                toastContainer.setAttribute("data-expanded", "false");
+                // Add a debounce to prevent flickering
+                Toaster._mouseLeaveEnterListenerDebouncer = setTimeout(() => {
+                    if (toastContainer.getAttribute("data-did-toggle-expansion") === "true") {
+                        return;
+                    }
+
+                    toastContainer.setAttribute("data-expanded", "false");
+                }, 50);
             };
 
             Toaster._toastContainerKeyDownListener = (e) => {
                 if (e.altKey && e.code === "KeyT") {
                     if (toastContainer.getAttribute("data-did-toggle-expansion") === "true") {
                         return;
+                    }
+
+                    if (Toaster._mouseLeaveEnterListenerDebouncer) {
+                        clearTimeout(Toaster._mouseLeaveEnterListenerDebouncer);
                     }
 
                     toastContainer.setAttribute("data-expanded", toastContainer.getAttribute("data-expanded") === "true" ? "false" : "true");

@@ -13,3 +13,8 @@
 # v1.0.3
 
 - Fix wrong toast exit animation position when toasts are stacked
+
+# v1.0.4
+
+- Fix flickering when pointer enters the outermost part of toast
+- Fix mouseenter and mouseleave interfering with key shortcut (Alt + T).
