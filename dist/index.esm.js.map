@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../src/index.esm.js"],
+  "sourcesContent": ["export function initializeToast() {}"],
+  "mappings": ";;AAAO,SAAS,kBAAkB;AAAC;AAAnB;",
+  "names": []
+}

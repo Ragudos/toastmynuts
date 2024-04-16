@@ -179,16 +179,16 @@
     visibility: hidden;
 }
 
+#__toastmynuts__ .__toastmynuts__toast {
+    --_toastmynuts-default-bg: #fff;
+    --_toastmynuts-default-fg: #000;
+}
+
 @media (prefers-color-scheme: dark) {
     #__toastmynuts__ .__toastmynuts__toast {
         --_toastmynuts-default-bg: #212121;
         --_toastmynuts-default-fg: #fff;
     }
-}
-
-#__toasatmynuts__ .__toastmynuts__toast[data-theme="light"] {
-    --_toastmynuts-default-bg: #fff;
-    --_toastmynuts-default-fg: #000;
 }
 
 #__toastmynuts__ .__toastmynuts__toast[data-theme="dark"] {
