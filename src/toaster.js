@@ -173,14 +173,13 @@ export class Toaster {
             return;
         }
 
-        toastElement.setAttribute("data-toast-state", "closing");
-
         while (toast._controllers.length !== 0) {
             toast._controllers.pop()?.abort();
         }
 
         const toastElementTransitionDuration = parseFloat(getComputedStyle(toastElement).transitionDuration);
         this._moveToastsUp(toastIdx);
+        toastElement.setAttribute("data-toast-state", "closing");
 
         setTimeout(() => {
             // The toast idx might change already when this timeout is called,
@@ -212,7 +211,7 @@ export class Toaster {
                 throw new Error("[ToastMyNuts] Could not find toast with ID " + toast._id + " in the DOM");
             }
 
-            if (toast._timeout) {
+            if (toast._timeout !== undefined) {
                 clearTimeout(toast._timeout);
             }
 
@@ -256,6 +255,20 @@ export class Toaster {
                 toastElement.style.setProperty("--_z-idx", i.toString());
             }
         }, toastElementTransitionDuration * 1000);
+    }
+
+    /**
+     * @private
+     */
+    _removeTimeoutOfToasts() {
+        for (let i = 0; i < this._toasts.length; ++i) {
+            const toast = this._toasts[i];
+
+            if (toast._timeout) {
+                clearTimeout(toast._timeout);
+                this._toasts[i]._timeout = undefined;
+            }
+        }
     }
 
     /**
@@ -316,7 +329,9 @@ export class Toaster {
             }
 
             if (this._toasts.length - i <= maxVisibleToasts + 1) {
-                toastElement.removeAttribute("data-toast-state");
+                if (toastElement.getAttribute("data-toast-state") === "hidden") {
+                    toastElement.removeAttribute("data-toast-state");
+                }
             }
         }
     }
@@ -357,7 +372,9 @@ export class Toaster {
             toastElement.removeAttribute("data-front-toast");
 
             if (this._toasts.length - i >= maxVisibleToasts) {
-                toastElement.setAttribute("data-toast-state", "hidden");
+                if (toastElement.getAttribute("data-toast-state") !== "closing") {
+                    toastElement.setAttribute("data-toast-state", "hidden");
+                }
             }
         }
     }

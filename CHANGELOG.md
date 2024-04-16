@@ -9,3 +9,7 @@
     - Expand toasts on keypress (Alt + T) and pointerenter
     - Close toast on close button click.
 - Published to NPM
+
+# v1.0.3
+
+- Fix wrong toast exit animation position when toasts are stacked

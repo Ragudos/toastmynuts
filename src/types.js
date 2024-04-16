@@ -46,6 +46,6 @@
 * @property {AbortController[]} _controllers
 * An array of aborters this function has. They are stored, so they can destroy their
 * respective events along with the toast. **This should not be altered externally.**
-* @property {number} _timeout
+* @property {number | undefined} _timeout
 * The timeout id for the toast. **This should not be altered externally.**
 */

@@ -155,14 +155,13 @@
     --_scale: calc(1 - var(--_idx) * 0.05);
 }
 
+#__toastmynuts__[data-expanded="false"] .__toastmynuts__toast[data-toast-state="closing"] {
+    --_y: calc(var(--_lift) - (25% * var(--_dir_y)));
+}
+
 #__toastmynuts__[data-expanded="false"] .__toastmynuts__toast:not([data-front-toast="true"]) > div {
     padding-block: 0;
     height: var(--_front-toast-height, auto);
-}
-
-#__toastmynuts__[data-expanded="false"] .__toastmynuts__toast:not([data-front-toast="true"]) > div > * {
-    opacity: 0;
-    visibility: hidden;
 
     transition-duration: 0ms;
 }
@@ -174,7 +173,8 @@
 
 #__toastmynuts__ .__toastmynuts__toast[data-toast-state="entering"],
 #__toastmynuts__ .__toastmynuts__toast[data-toast-state="hidden"],
-#__toastmynuts__ .__toastmynuts__toast[data-toast-state="closing"] {
+#__toastmynuts__ .__toastmynuts__toast[data-toast-state="closing"],
+ #__toastmynuts__[data-expanded="false"] .__toastmynuts__toast:not([data-front-toast="true"]) > div > * {
     opacity: 0;
     visibility: hidden;
 }
