@@ -2,6 +2,7 @@
 
 export const TOAST_DURATION = 60_000;
 export const TOAST_CONTAINER_ID = "__toastmynuts__";
+export const TOAST_WRAPPER_ID = "__toastmynuts__wrapper";
 export const TOAST_CLASS = "__toastmynuts__toast";
 export const TOAST_MESSAGE_CLASS = "__toastmynuts__message";
 export const TOAST_CLOSE_BTN_CLASS = "__toastmynuts__close-btn";
@@ -36,6 +37,18 @@ export class Toaster {
 
     /**
      * @private
+     * @type {(() => void) | undefined}
+     */
+    static _toastContainerMouseEnterListener;
+
+    /**
+     * @private
+     * @type {(() => void) | undefined}
+     */
+    static _toastContainerMouseLeaveListener;
+
+    /**
+     * @private
      */
     constructor() {
         this._toasts = [];
@@ -66,6 +79,7 @@ export class Toaster {
             closeBtnAbortController
         ] = this._createCloseBtn(toastId);
         const toastElement = this._createToastElement(toastId, type);
+        const toastRelativeContainer = document.createElement("div");
         const messageElement = this._createMessageElement(message);
         const timeout = setTimeout(() => {
             if (Toaster._config && Toaster._config.ignoreErrors) {
@@ -77,8 +91,9 @@ export class Toaster {
             }
         }, TOAST_DURATION);
 
-        toastElement.appendChild(messageElement);
-        toastElement.appendChild(closeBtn);
+        toastRelativeContainer.appendChild(messageElement);
+        toastRelativeContainer.appendChild(closeBtn);
+        toastElement.appendChild(toastRelativeContainer);
         toastContainer.prepend(toastElement);
 
         const originalHeight = toastElement.style.height;
@@ -86,11 +101,14 @@ export class Toaster {
         toastElement.style.height = "auto";
 
         const packedHeight = toastElement.getBoundingClientRect().height;
+        const packedHeightString = `${packedHeight}px`;
 
         toastElement.style.height = originalHeight;
-        toastElement.style.setProperty("--_initial-height", `${packedHeight}px`);
-        this._moveToastsDown(packedHeight);
+        toastContainer.style.setProperty("--_front-toast-height", packedHeightString);
+        toastElement.style.setProperty("--_initial-height", packedHeightString);
+
         toastElement.removeAttribute("data-toast-state");
+        this._moveToastsDown(packedHeight);
 
         this._toasts.push({
             _message: message,
@@ -190,9 +208,18 @@ export class Toaster {
             this._toasts.splice(toastIdx, 1);
 
             if (this._toasts.length === 0) {
+                const toastWrapper = document.getElementById(TOAST_WRAPPER_ID);
                 const toastContainer = document.getElementById(TOAST_CONTAINER_ID);
 
-                toastContainer?.remove();
+                if (Toaster._toastContainerMouseEnterListener) {
+                    toastContainer?.removeEventListener("pointerenter", Toaster._toastContainerMouseEnterListener);
+                }
+
+                if (Toaster._toastContainerMouseLeaveListener) {
+                    toastContainer?.removeEventListener("pointerleave", Toaster._toastContainerMouseLeaveListener);
+                }
+
+                toastWrapper?.remove();
             }
 
             for (let i = toastIdx; i < this._toasts.length; ++i) {
@@ -264,6 +291,10 @@ export class Toaster {
             // -2 because we need to account for the toast that will be removed.
             toastElement.style.setProperty("--_idx", (this._toasts.length - i - 2).toString());
 
+            if (i === this._toasts.length - 2) {
+                toastElement.setAttribute("data-front-toast", "true");
+            }
+
             if (this._toasts.length - i <= maxVisibleToasts + 1) {
                 toastElement.removeAttribute("data-toast-state");
             }
@@ -303,6 +334,7 @@ export class Toaster {
 
             toastElement.style.setProperty("--_height-offset", `${heightOffset}px`);
             toastElement.style.setProperty("--_idx", (this._toasts.length - i).toString());
+            toastElement.removeAttribute("data-front-toast");
 
             if (this._toasts.length - i >= maxVisibleToasts) {
                 toastElement.setAttribute("data-toast-state", "hidden");
@@ -318,14 +350,31 @@ export class Toaster {
         const toastContainer = document.getElementById(TOAST_CONTAINER_ID);
 
         if (!toastContainer) {
+            const toastWrapper = document.createElement("div");
+
+            toastWrapper.id = TOAST_WRAPPER_ID;
+            toastWrapper.setAttribute("aria-label", "Notifications (Alt + T)");
+
             const toastContainer = document.createElement("ol");
 
             toastContainer.id = TOAST_CONTAINER_ID;
-            toastContainer.setAttribute("aria-label", "Notifications (Alt + T)");
             toastContainer.setAttribute("data-position-x", Toaster._config?.position?.x || TOAST_DEFAULT_POSITION.x);
             toastContainer.setAttribute("data-position-y", Toaster._config?.position?.y || TOAST_DEFAULT_POSITION.y);
+            toastContainer.setAttribute("data-expanded", "false");
 
-            document.body.appendChild(toastContainer);
+            Toaster._toastContainerMouseEnterListener = () => {
+                toastContainer.setAttribute("data-expanded", "true");
+            }
+
+            Toaster._toastContainerMouseLeaveListener = () => {
+                toastContainer.setAttribute("data-expanded", "false");
+            };
+
+            toastContainer.addEventListener("pointerenter", Toaster._toastContainerMouseEnterListener);
+            toastContainer.addEventListener("pointerleave", Toaster._toastContainerMouseLeaveListener);
+
+            toastWrapper.appendChild(toastContainer);
+            document.body.appendChild(toastWrapper);
 
             return toastContainer;
         }
@@ -368,6 +417,8 @@ export class Toaster {
         toastElement.setAttribute("data-toast-type", type);
         toastElement.setAttribute("data-toast-state", "entering");
         toastElement.setAttribute("aria-live", "polite");
+        toastElement.setAttribute("aria-atomic", "true");
+        toastElement.setAttribute("data-front-toast", "true");
 
         return toastElement;
     }

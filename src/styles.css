@@ -1,4 +1,6 @@
-#__toastmynuts__ {
+#__toastmynuts__wrapper {
+    box-sizing: border-box;
+
     --_gap: 16px;
 
     position: fixed;
@@ -11,10 +13,18 @@
     left: 0;
     right: 0;
 
+    margin: auto;
+
     pointer-events: none;
     touch-action: none;
 
     z-index: 999;
+}
+
+#__toastmynuts__ {
+    padding: 0;
+
+    list-style: none;
 }
 
 #__toastmynuts__[data-position-x="left"] .__toastmynuts__toast {
@@ -42,16 +52,13 @@
 }
 
 #__toastmynuts__ .__toastmynuts__toast {
-    width: var(--_toastmynuts-tw, min(100%, 20rem));
-
     position: absolute;
 
-    pointer-events: all;
-    touch-action: auto;
+    width: min-content;
 
     will-change: transform, opacity, visibility;
     transition-property: transform, opacity, visibility;
-    transition-duration: var(--_toastmynuts-td, 250ms);
+    transition-duration: var(--_toastmynuts-td, 350ms);
     transition-timing-function: ease;
 
     transform: translateX(var(--_x, 0)) translateY(var(--_y, 0)) scale(var(--_scale, 1)) rotate(var(--_rotate, 0deg));
@@ -60,6 +67,22 @@
     --_lift: calc(var(--_gap-height) * var(--_dir_y));
     --_offset: calc(var(--_lift) + (var(--_height-offset, 0px)));
     --_y: var(--_offset);
+
+    z-index: var(--_z-idx);
+}
+
+#__toastmynuts__ .__toastmynuts__toast > div {
+    pointer-events: all;
+    touch-action: auto;
+
+    width: var(--_toastmynuts-tw, min(80vw, 20rem));
+
+    display: flex;
+    gap: 1rem;
+
+    position: relative;
+
+    will-change: height, padding-block;
 
     color: var(--_toastmynuts-fg, var(--_toastmynuts-default-fg));
     background-color: var(--_toastmynuts-bg, var(--_toastmynuts-default-bg));
@@ -72,21 +95,36 @@
         0px 4px 4px hsl(0 0% 0% / 0.25),
         0px 8px 8px hsl(0 0% 0% / 0.25);
 
-    z-index: var(--_z-idx);
-
-    padding: 0.5rem 1rem;
-
-    display: flex;
-    gap: 1rem;
+    padding: 1rem;
 }
 
-#__toastmynuts__ .__toastmynuts__toast .__toastmynuts__message {
+#__toastmynuts__ .__toastmynuts__toast > div > * {
+    will-change: opacity, visibility;
+    transition-property: opacity, visibility;
+    transition-duration: var(--_toastmynuts-td, 350ms);
+    transition-timing-function: inherit;
+}
+
+#__toastmynuts__ .__toastmynuts__toast > div::before {
+    position: absolute;
+
+    content: "";
+
+    width: 100%;
+    height: calc(var(--_gap) + 1px);
+
+    left: 0;
+
+    bottom: 100%;
+}
+
+#__toastmynuts__ .__toastmynuts__toast > div .__toastmynuts__message {
     flex-grow: 1;
 
     font-weight: 500;
 }
 
-#__toastmynuts__ .__toastmynuts__toast .__toastmynuts__close-btn {
+#__toastmynuts__ .__toastmynuts__toast > div .__toastmynuts__close-btn {
     flex-shrink: 0;
 
     padding: 0.25rem;
@@ -107,9 +145,26 @@
     color: var(--_toastmynuts-fg, var(--_toastmynuts-default-fg));
 }
 
-#__toastmynuts__ .__toastmynuts__toast .__toastmynuts__close-btn svg {
+#__toastmynuts__ .__toastmynuts__toast > div .__toastmynuts__close-btn svg {
     width: 1rem;
     height: 1rem;
+}
+
+#__toastmynuts__[data-expanded="false"] .__toastmynuts__toast {
+    --_y: var(--_lift);
+    --_scale: calc(1 - var(--_idx) * 0.05);
+}
+
+#__toastmynuts__[data-expanded="false"] .__toastmynuts__toast:not([data-front-toast="true"]) > div {
+    padding-block: 0;
+    height: var(--_front-toast-height, auto);
+}
+
+#__toastmynuts__[data-expanded="false"] .__toastmynuts__toast:not([data-front-toast="true"]) > div > * {
+    opacity: 0;
+    visibility: hidden;
+
+    transition-duration: 0ms;
 }
 
 #__toastmynuts__ .__toastmynuts__toast[data-toast-state="entering"],
