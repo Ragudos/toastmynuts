@@ -34,7 +34,6 @@ export class Toaster {
      * @private
      * @type {Toast[]}
      *
-     *
      * To avoid a race condition for moving toasts upwards when removing a toast,
      * where in the loop, they'd have the same reference to the toast array before the
      * previous toasts were removed (they are still in an exit animation and yet to be removed),
@@ -213,6 +212,26 @@ export class Toaster {
         if (isHidden) {
             this._removeToastPermanently(toastId, true);
             this._toasts.splice(toastIdx, 1);
+
+            for (let i = toastIdx; i < this._toasts.length; ++i) {
+                const toast = this._toasts[i];
+
+                if (!toast) {
+                    continue;
+                }
+
+                /**
+                 * @type {HTMLElement | null}
+                 */
+                const toastElement = document.getElementById(toast._id);
+
+                if (!toastElement) {
+                    throw new Error("[ToastMyNuts] Could not find toast with ID " + toast._id + " in the DOM");
+                }
+
+                toastElement.style.setProperty("--_z-idx", i .toString());
+            }
+
             return;
         }
 
@@ -224,6 +243,25 @@ export class Toaster {
         // Remove the array so that, if a user instantly closes another toast,
         // the then call to _moveToastsUp will reference the updated state.
         this._toasts.splice(toastIdx, 1);
+
+        for (let i = toastIdx; i < this._toasts.length; ++i) {
+            const toast = this._toasts[i];
+
+            if (!toast) {
+                continue;
+            }
+
+            /**
+             * @type {HTMLElement | null}
+             */
+            const toastElement = document.getElementById(toast._id);
+
+            if (!toastElement) {
+                throw new Error("[ToastMyNuts] Could not find toast with ID " + toast._id + " in the DOM");
+            }
+
+            toastElement.style.setProperty("--_z-idx", i.toString());
+        }
 
         setTimeout(() => {
             this._removeToastPermanently(toastId, false);
@@ -418,20 +456,6 @@ export class Toaster {
                 }
             }
         }
-
-        for (let i = start + 1; i < this._toasts.length; ++i) {
-            const toast = this._toasts[i];
-            /**
-             * @type {HTMLElement | null}
-             */
-            const toastElement = document.getElementById(toast._id);
-
-            if (!toastElement) {
-                throw new Error("[ToastMyNuts] Could not find toast with ID " + toast._id + " in the DOM");
-            }
-
-            toastElement.style.setProperty("--_z-idx", (i - 1).toString());
-        }
     }
 
     /**
@@ -494,11 +518,14 @@ export class Toaster {
             const toastContainer = document.createElement("ol");
 
             toastContainer.id = TOAST_CONTAINER_ID;
+            const isStackable = Toaster._config?.stackable === true || Toaster._config?.stackable === undefined;
+
             toastContainer.setAttribute("data-position-x", Toaster._config?.position?.x || TOAST_DEFAULT_POSITION.x);
             toastContainer.setAttribute("data-position-y", Toaster._config?.position?.y || TOAST_DEFAULT_POSITION.y);
-            toastContainer.setAttribute("data-expanded", "false");
+            toastContainer.setAttribute("data-stackable", isStackable ? "true" : "false")
+            toastContainer.setAttribute("data-expanded", isStackable ? "false" : "true");
 
-            if (Toaster._config?.stackable === false) {
+            if (isStackable) {
                 Toaster._toastContainerMouseEnterListener = () => {
                     if (toastContainer.getAttribute("data-did-toggle-expansion") === "true") {
                         return;
@@ -509,14 +536,29 @@ export class Toaster {
                     }
 
                     toastContainer.setAttribute("data-expanded", "true");
+                    toastContainer.removeAttribute("data-should-stack");
                     this._removeTimeoutOfToasts();
                 }
 
                 Toaster._toastContainerMouseLeaveListener = () => {
                     // Add a debounce to prevent flickering
+
+                    if (Toaster._mouseLeaveEnterListenerDebouncer) {
+                        clearTimeout(Toaster._mouseLeaveEnterListenerDebouncer);
+                    }
+
                     Toaster._mouseLeaveEnterListenerDebouncer = setTimeout(() => {
                         if (toastContainer.getAttribute("data-did-toggle-expansion") === "true") {
                             return;
+                        }
+
+                        const children = toastContainer.children;
+
+                        for (let i = 0; i < children.length; ++i) {
+                            if (children[i].getAttribute("data-is-swiping") === "true") {
+                                toastContainer.setAttribute("data-should-stack", "true");
+                                return;
+                            }
                         }
 
                         toastContainer.setAttribute("data-expanded", "false");
@@ -608,15 +650,72 @@ export class Toaster {
         toastElement.setAttribute("data-front-toast", "true");
 
         toastElement.addEventListener("pointerdown", (evt) => {
-            console.log(evt);
+            toastElement.setAttribute("data-is-swiping", "true");
+
+            const originalPosition = evt.screenY;
+
+            toastElement.style.setProperty("--_original-position", originalPosition.toString());
         }, { signal: listenerAbortController.signal });
 
-        toastElement.addEventListener("pointerup", (evt) => {
-            console.log(evt);
+        window.addEventListener("pointerup", (evt) => {
+            const swipeOffset = parseFloat(toastElement.style.getPropertyValue("--_swipe-offset"));
+
+            toastElement.setAttribute("data-is-swiping", "false");
+
+            if (Math.abs(swipeOffset) > 15) {
+                toastElement.setAttribute("data-exit-swipe", "true");
+                this.removeToast(toastId);
+            } else {
+                toastElement.style.setProperty("--_swipe-offset", "0px");
+                toastElement.style.removeProperty("--_original-position");
+            }
+
+            const toastContainer = document.getElementById(TOAST_CONTAINER_ID);
+
+            if (!toastContainer) {
+                if (!Toaster._config?.ignoreErrors) {
+                    throw new Error("[ToastMyNuts] Could not find toast container with ID " + TOAST_CONTAINER_ID);
+                } else {
+                    return;
+                }
+            }
+
+            if (toastContainer.getAttribute("data-should-stack") === "true") {
+                toastContainer.setAttribute("data-should-stack", "false");
+                toastContainer.setAttribute("data-expanded", "false");
+                this._addTimeoutToToasts();
+            }
         }, { signal: listenerAbortController.signal });
 
-        toastElement.addEventListener("pointermove", (evt) => {
-            console.log(evt);
+        window.addEventListener("pointermove", (evt) => {
+            const isSwiping = toastElement.getAttribute("data-is-swiping") === "true";
+
+            if (!isSwiping) {
+                return;
+            }
+            const toastContainer = document.getElementById(TOAST_CONTAINER_ID);
+
+            if (!toastContainer) {
+                if (!Toaster._config?.ignoreErrors) {
+                    throw new Error("[ToastMyNuts] Could not find toast container with ID " + TOAST_CONTAINER_ID);
+                } else {
+                    return;
+                }
+            }
+
+            const verticalPosition = toastContainer.getAttribute("data-position-y");
+            const isTop = verticalPosition === "top";
+            const isBottom = verticalPosition === "bottom";
+            const originalPosition = parseFloat(toastElement.style.getPropertyValue("--_original-position"));
+            const swipeOffset = originalPosition - evt.screenY;
+
+            if ((isTop && swipeOffset < 0) || (isBottom && swipeOffset > 0)) {
+                return;
+            } else if (!isTop && !isBottom  && !Toaster._config?.ignoreErrors) {
+                throw new Error("[ToastMyNuts] Invalid vertical position " + verticalPosition);
+            }
+
+            toastElement.style.setProperty("--_swipe-offset", `${swipeOffset}px`);
         }, { signal: listenerAbortController.signal });
 
         return [toastElement, listenerAbortController];

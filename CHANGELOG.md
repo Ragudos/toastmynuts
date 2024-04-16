@@ -29,3 +29,8 @@
 - Fix toasts on stack not in sync with the new state of toasts array when toasts are removed very quickly
 consecutively by using a new array for toBeRemoved toasts and removing the toast to be removed from the
 array of toasts.
+
+# v1.1.0
+
+- Add close on swipe
+- Fix z-index not updating properly after micro-optimization from commit 153a71d2eae294c210689caabe1cec8237693d65
