@@ -110,7 +110,10 @@ export class Toaster {
             closeBtn,
             closeBtnAbortController
         ] = this._createCloseBtn(toastId);
-        const toastElement = this._createToastElement(toastId, type);
+        const [
+            toastElement,
+            abortController
+        ] = this._createToastElement(toastId, type);
         const toastRelativeContainer = document.createElement("div");
         const messageElement = this._createMessageElement(message);
         const timeout = setTimeout(() => {
@@ -126,7 +129,7 @@ export class Toaster {
         toastRelativeContainer.appendChild(messageElement);
         toastRelativeContainer.appendChild(closeBtn);
         toastElement.appendChild(toastRelativeContainer);
-        toastContainer.prepend(toastElement);
+        toastContainer.appendChild(toastElement);
 
         const originalHeight = toastElement.style.height;
 
@@ -197,76 +200,105 @@ export class Toaster {
             return;
         }
 
-        toastElement.setAttribute("data-toast-state", "closing");
-
         while (toast._controllers.length !== 0) {
             toast._controllers.pop()?.abort();
         }
+
+        const isHidden = toastElement.getAttribute("data-toast-state") === "hidden";
+
+        if (toast._timeout !== undefined) {
+            clearTimeout(toast._timeout);
+        }
+
+        if (isHidden) {
+            this._removeToastPermanently(toastId, true);
+            this._toasts.splice(toastIdx, 1);
+            return;
+        }
+
+        toastElement.setAttribute("data-toast-state", "closing");
 
         const toastElementTransitionDuration = parseFloat(getComputedStyle(toastElement).transitionDuration);
         this._moveToastsUp(toastIdx);
         this._toastToBeRemoved.push(toast);
         // Remove the array so that, if a user instantly closes another toast,
         // the then call to _moveToastsUp will reference the updated state.
-
-        if (toast._timeout !== undefined) {
-            clearTimeout(toast._timeout);
-        }
-
         this._toasts.splice(toastIdx, 1);
 
         setTimeout(() => {
-            // The toast idx might change already when this timeout is called,
-            // so we find it again.
+            this._removeToastPermanently(toastId, false);
+        }, toastElementTransitionDuration * 1000);
+    }
 
-            /**
-             * @type {Toast | undefined}
-             */
-            let toast;
-            let toastIdx;
+    /**
+     * @private
+     * @param {string} toastId
+     * @param {boolean} isRemovedInstantly
+     * Whether our toast did not have an exit animation
+     */
+    _removeToastPermanently(toastId, isRemovedInstantly) {
+        // The toast idx might change already when this callback is called,
+        // so we find it again.
 
+        /**
+         * @type {Toast | undefined}
+         */
+        let toast;
+        let toastIdx;
+
+        if (isRemovedInstantly) {
+            for (let i = 0; i < this._toasts.length; ++i) {
+                if (this._toasts[i]._id === toastId) {
+                    toast = this._toasts[i];
+                    toastIdx = i;
+                }
+            }
+        } else {
             for (let i = 0; i < this._toastToBeRemoved.length; ++i) {
                 if (this._toastToBeRemoved[i]._id === toastId) {
                     toast = this._toastToBeRemoved[i];
                     toastIdx = i;
                 }
             }
+        }
 
-            if (!toast || toastIdx === undefined) {
-                throw new Error("[ToastMyNuts] Could not find toast with ID " + toastId + " virtually");
-            }
+        if (!toast) {
+            throw new Error("[ToastMyNuts] Could not find toast with ID " + toastId + " virtually");
+        }
 
-            const toastElement = document.getElementById(toast._id);
+        const toastElement = document.getElementById(toast._id);
 
-            // TODO: Find a way for the toast Element to exist when toasts are removed
-            // almost instantly one after the other. For some reason, it doesn't exist,
-            // but we still successfully execute everything else.
-            toastElement?.remove();
+        // TODO: Find a way for the toast Element to exist when toasts are removed
+        // almost instantly one after the other. For some reason, it doesn't exist,
+        // but we still successfully execute everything.
+        toastElement?.remove();
+
+        if (!isRemovedInstantly && toastIdx !== undefined) {
             this._toastToBeRemoved.splice(toastIdx, 1);
+        }
 
-            if (this._toasts.length === 0) {
-                const toastWrapper = document.getElementById(TOAST_WRAPPER_ID);
-                const toastContainer = document.getElementById(TOAST_CONTAINER_ID);
+        if (this._toasts.length === 0) {
+            const toastWrapper = document.getElementById(TOAST_WRAPPER_ID);
+            const toastContainer = document.getElementById(TOAST_CONTAINER_ID);
 
-                if (Toaster._toastContainerMouseEnterListener) {
-                    toastContainer?.removeEventListener("pointerenter", Toaster._toastContainerMouseEnterListener);
-                }
-
-                if (Toaster._toastContainerMouseLeaveListener) {
-                    toastContainer?.removeEventListener("pointerleave", Toaster._toastContainerMouseLeaveListener);
-                }
-
-                if (Toaster._toastContainerKeyDownListener) {
-                    window.removeEventListener("keydown", Toaster._toastContainerKeyDownListener);
-                }
-
-                if (Toaster._toastContainerKeyUpListener) {
-                    window.removeEventListener("keyup", Toaster._toastContainerKeyUpListener);
-                }
-
-                toastWrapper?.remove();
+            if (Toaster._toastContainerMouseEnterListener) {
+                toastContainer?.removeEventListener("pointerenter", Toaster._toastContainerMouseEnterListener);
             }
-        }, toastElementTransitionDuration * 1000);
+
+            if (Toaster._toastContainerMouseLeaveListener) {
+                toastContainer?.removeEventListener("pointerleave", Toaster._toastContainerMouseLeaveListener);
+            }
+
+            if (Toaster._toastContainerKeyDownListener) {
+                window.removeEventListener("keydown", Toaster._toastContainerKeyDownListener);
+            }
+
+            if (Toaster._toastContainerKeyUpListener) {
+                window.removeEventListener("keyup", Toaster._toastContainerKeyUpListener);
+            }
+
+            toastWrapper?.remove();
+        }
     }
 
     /**
@@ -559,9 +591,10 @@ export class Toaster {
      * @param {string} toastId
      * @param {ToastType} type
      *
-     * @returns {HTMLLIElement}
+     * @returns {[HTMLLIElement, AbortController]}
      */
     _createToastElement(toastId, type) {
+        const listenerAbortController = new AbortController();
         const toastElement = document.createElement("li");
 
         toastElement.id = toastId;
@@ -574,7 +607,11 @@ export class Toaster {
         toastElement.setAttribute("aria-atomic", "true");
         toastElement.setAttribute("data-front-toast", "true");
 
-        return toastElement;
+        toastElement.addEventListener("pointerdown", (evt) => {
+            console.log(evt.currentTarget);
+        }, { signal: listenerAbortController.signal });
+
+        return [toastElement, listenerAbortController];
     }
 
     /**

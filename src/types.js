@@ -23,6 +23,9 @@
 * @property {number} maxVisibleToasts
 * The amount of toasts visible on the screen when they
 * are expanded. Excess toasts will be hidden.
+* @property {boolean} closeOnSwipe
+* Whether or not to close the toast when swiped.
+* The swiping direction will be based on where the toast entered.
 * @property {boolean} ignoreErrors
 * We silence thrown errors by having an empty catch block
 *```ts

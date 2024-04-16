@@ -164,7 +164,7 @@
 }
 
 #__toastmynuts__[data-expanded="false"] .__toastmynuts__toast[data-toast-state="closing"] {
-    --_y: calc(var(--_lift) - (25% * var(--_dir_y)));
+    --_y: calc(var(--_lift) - (100% * var(--_dir_y)));
 }
 
 #__toastmynuts__[data-expanded="false"] .__toastmynuts__toast:not([data-front-toast="true"]) > div {
