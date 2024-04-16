@@ -33,4 +33,6 @@ array of toasts.
 # v1.1.0
 
 - Add close on swipe
+- Remove timeouts of toast on expand
+- Option to not stack toasts at all but still remove timeouts of toasts when the triggers for expansion are triggers.
 - Fix z-index not updating properly after micro-optimization from commit 153a71d2eae294c210689caabe1cec8237693d65
