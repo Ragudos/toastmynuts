@@ -63,8 +63,6 @@
 
     will-change: transform, opacity, visibility;
     transition-property: transform, opacity, visibility;
-    transition-duration: var(--_toastmynuts-td, 350ms);
-    transition-timing-function: ease;
 
     transform: translateX(var(--_x, 0)) translateY(var(--_y, 0)) scale(var(--_scale, 1)) rotate(var(--_rotate, 0deg));
 
@@ -89,8 +87,6 @@
 
     will-change: height;
     transition-property: height;
-    transition-duration: var(--_toastmynuts-td, 350ms);
-    transition-timing-function: ease;
 
     color: var(--_toastmynuts-fg, var(--_toastmynuts-default-fg));
     background-color: var(--_toastmynuts-bg, var(--_toastmynuts-default-bg));
@@ -109,8 +105,12 @@
 #__toastmynuts__ .__toastmynuts__toast > div > * {
     will-change: opacity, visibility;
     transition-property: opacity, visibility;
+}
+
+#__toastmynuts__ .__toastmynuts__toast,
+#__toastmynuts__ .__toastmynuts__toast * {
     transition-duration: var(--_toastmynuts-td, 350ms);
-    transition-timing-function: inherit;
+    transition-timing-function: ease;   --_z-idx: 1000;
 }
 
 #__toastmynuts__ .__toastmynuts__toast > div::before {

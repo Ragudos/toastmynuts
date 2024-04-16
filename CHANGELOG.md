@@ -23,3 +23,9 @@
 
 - Change box-sizing to border-box to not include padding in toast's height.
 - Add stackable config option
+
+# v1.0.6
+
+- Fix toasts on stack not in sync with the new state of toasts array when toasts are removed very quickly
+consecutively by using a new array for toBeRemoved toasts and removing the toast to be removed from the
+array of toasts.

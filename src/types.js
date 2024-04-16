@@ -38,7 +38,6 @@
 
 /**
 * @global
-
 * @typedef {Object} Toast
 * @property {string} _id
 * @property {string} _message
@@ -53,3 +52,11 @@
 * @property {number | undefined} _timeout
 * The timeout id for the toast. **This should not be altered externally.**
 */
+
+/**
+ * @global
+ *
+ * @typedef {Object} ToastRemoval
+ * @property {number} idxInToastArray
+ * The index of the toast in the toast array, so it can be used when changing the z indices of its siblings.
+ */

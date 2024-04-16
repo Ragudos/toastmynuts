@@ -29,6 +29,19 @@ export class Toaster {
      * @type {Toast[]}
      */
     _toasts;
+
+    /**
+     * @private
+     * @type {Toast[]}
+     *
+     *
+     * To avoid a race condition for moving toasts upwards when removing a toast,
+     * where in the loop, they'd have the same reference to the toast array before the
+     * previous toasts were removed (they are still in an exit animation and yet to be removed),
+     * we add them to a toBeRemovedArray so we can remove them from the main toast array
+     */
+    _toastToBeRemoved;
+
     /**
      * @private
      * @type {ToastConfig | undefined}
@@ -70,6 +83,7 @@ export class Toaster {
      */
     constructor() {
         this._toasts = [];
+        this._toastToBeRemoved = [];
     }
 
     /**
@@ -179,13 +193,23 @@ export class Toaster {
             return;
         }
 
+        toastElement.setAttribute("data-toast-state", "closing");
+
         while (toast._controllers.length !== 0) {
             toast._controllers.pop()?.abort();
         }
 
         const toastElementTransitionDuration = parseFloat(getComputedStyle(toastElement).transitionDuration);
         this._moveToastsUp(toastIdx);
-        toastElement.setAttribute("data-toast-state", "closing");
+        this._toastToBeRemoved.push(toast);
+        // Remove the array so that, if a user instantly closes another toast,
+        // the then call to _moveToastsUp will reference the updated state.
+
+        if (toast._timeout !== undefined) {
+            clearTimeout(toast._timeout);
+        }
+
+        this._toasts.splice(toastIdx, 1);
 
         setTimeout(() => {
             // The toast idx might change already when this timeout is called,
@@ -195,14 +219,11 @@ export class Toaster {
              * @type {Toast | undefined}
              */
             let toast;
-            /**
-             * @type {number | undefined}
-             */
             let toastIdx;
 
-            for (let i = 0; i < this._toasts.length; ++i) {
-                if (this._toasts[i]._id === toastId) {
-                    toast = this._toasts[i];
+            for (let i = 0; i < this._toastToBeRemoved.length; ++i) {
+                if (this._toastToBeRemoved[i]._id === toastId) {
+                    toast = this._toastToBeRemoved[i];
                     toastIdx = i;
                 }
             }
@@ -213,16 +234,11 @@ export class Toaster {
 
             const toastElement = document.getElementById(toast._id);
 
-            if (!toastElement) {
-                throw new Error("[ToastMyNuts] Could not find toast with ID " + toast._id + " in the DOM");
-            }
-
-            if (toast._timeout !== undefined) {
-                clearTimeout(toast._timeout);
-            }
-
-            toastElement.remove();
-            this._toasts.splice(toastIdx, 1);
+            // TODO: Find a way for the toast Element to exist when toasts are removed
+            // almost instantly one after the other. For some reason, it doesn't exist,
+            // but we still successfully execute everything else.
+            toastElement?.remove();
+            this._toastToBeRemoved.splice(toastIdx, 1);
 
             if (this._toasts.length === 0) {
                 const toastWrapper = document.getElementById(TOAST_WRAPPER_ID);
@@ -245,20 +261,6 @@ export class Toaster {
                 }
 
                 toastWrapper?.remove();
-            }
-
-            for (let i = toastIdx; i < this._toasts.length; ++i) {
-                const toast = this._toasts[i];
-                /**
-                 * @type {HTMLElement | null}
-                 */
-                const toastElement = document.getElementById(toast._id);
-
-                if (!toastElement) {
-                    throw new Error("[ToastMyNuts] Could not find toast with ID " + toast._id + " in the DOM");
-                }
-
-                toastElement.style.setProperty("--_z-idx", i.toString());
             }
         }, toastElementTransitionDuration * 1000);
     }
@@ -340,6 +342,20 @@ export class Toaster {
                     toastElement.removeAttribute("aria-hidden");
                 }
             }
+        }
+
+        for (let i = start + 1; i < this._toasts.length; ++i) {
+            const toast = this._toasts[i];
+            /**
+             * @type {HTMLElement | null}
+             */
+            const toastElement = document.getElementById(toast._id);
+
+            if (!toastElement) {
+                throw new Error("[ToastMyNuts] Could not find toast with ID " + toast._id + " in the DOM");
+            }
+
+            toastElement.style.setProperty("--_z-idx", (i - 1).toString());
         }
     }
 
