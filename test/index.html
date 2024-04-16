@@ -6,8 +6,22 @@
     <title>Document</title>
 
     <script src="../dist/index.umd.js" defer></script>
+    <link rel="stylesheet" href="../dist/styles.css" />
 </head>
 <body>
-    <button onclick="window.ToastMyNuts.create('hi')">Show toast</button>
+    <button>Show toast</button>
+    <script>
+        const words = [
+            "hi",
+            " jfoewjifjeio jrije irjejrio jiejri jeiorji ewjiroj ioejrio jiowerjiowej",
+            "hhohohoooh"
+        ]
+
+        document.querySelector('button').addEventListener('click', function() {
+            const index = Math.floor(Math.random() * words.length);
+            const word = words[index];
+            window.ToastMyNuts.create(word);
+        });
+    </script>
 </body>
 </html>

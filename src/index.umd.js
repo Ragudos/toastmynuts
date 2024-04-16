@@ -1,5 +1,5 @@
 //@ts-check
-import { TOAST_CONTAINER_ID, Toaster } from "./toaster";
+import { Toaster } from "./toaster";
 
 /**
  * This is used internally and is not available as an external function.
@@ -33,20 +33,6 @@ function getConfig() {
 }
 
 const config = getConfig();
-
-/**
- * @type {ToastPosition}
- */
-const position = config?.position ? config.position : { x: "middle", y: "top" };
-
-const toastContainer = document.createElement("ol");
-toastContainer.id = TOAST_CONTAINER_ID;
-toastContainer.setAttribute("aria-label", "Notifications (Alt + T");
-toastContainer.setAttribute("data-position-x", position.x);
-toastContainer.setAttribute("data-position-y", position.y);
-
-document.body.appendChild(toastContainer);
-
 const toast = Toaster.getInstance(config);
 
 // @ts-ignore
@@ -67,17 +53,15 @@ window.ToastMyNuts = Object.freeze({
         }
     },
     /**
-     * @param {number} toastIdx
+     * @param {string} toastId
      */
-    remove: (toastIdx) => {
+    remove: (toastId) => {
         if (config && config.ignoreErrors) {
             try {
-                toast.removeToast(toastIdx);
-            } catch (error) {
-                console.error(error);
-            }
+                toast.removeToast(toastId);
+            } catch (error) {}
         } else {
-            toast.removeToast(toastIdx);
+            toast.removeToast(toastId);
         }
     }
 });

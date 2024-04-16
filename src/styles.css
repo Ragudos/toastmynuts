@@ -1,0 +1,94 @@
+#__toastmynuts__ {
+    --_gap: 16px;
+
+    position: fixed;
+
+    width: 95%;
+    height: 95%;
+
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    pointer-events: none;
+    touch-action: none;
+
+    z-index: 999;
+}
+
+#__toastmynuts__[data-position-x="left"] .__toastmynuts__toast {
+    left: 0;
+}
+
+#__toastmynuts__[data-position-x="right"] .__toastmynuts__toast {
+    right: 0;
+}
+
+#__toastmynuts__[data-position-x="middle"] .__toastmynuts__toast {
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+}
+
+#__toastmynuts__[data-position-y="top"] .__toastmynuts__toast {
+    top: 0;
+    --_dir_y: 1;
+}
+
+#__toastmynuts__[data-position-y="bottom"] .__toastmynuts__toast {
+    bottom: 0;
+    --_dir_y: -1;
+}
+
+#__toastmynuts__ .__toastmynuts__toast {
+    --_toastmynuts-default-bg: #fff;
+    --_toastmynuts-default-fg: #000;
+
+    width: var(--_toastmynuts-tw, min(100%, 20rem));
+
+    position: absolute;
+
+    pointer-events: all;
+    touch-action: auto;
+
+    transition-property: transform, opacity;
+    transition-duration: var(--_toastmynuts-td, 250ms);
+    transition-timing-function: ease;
+
+    transform: translateX(var(--_x, 0)) translateY(var(--_y, 0)) scale(var(--_scale, 1)) rotate(var(--_rotate, 0deg));
+
+    --_gap-height: calc(var(--_idx) * var(--_gap, 0px));
+    --_lift: calc(var(--_gap-height) * var(--_dir_y));
+    --_offset: calc(var(--_lift) + (var(--_height-offset, 0px)));
+    --_y: var(--_offset);
+
+    color: var(--_toastmynuts-fg, var(--_toastmynuts-default-fg));
+    background-color: var(--_toastmynuts-bg, var(--_toastmynuts-default-bg));
+
+    box-shadow:
+        0px 1px 1px hsl(0 0% 0% / 0.1),
+        0px 2px 2px hsl(0 0% 0% / 0.1),
+        0px 4px 4px hsl(0 0% 0% / 0.1),
+        0px 8px 8px hsl(0 0% 0% / 0.1);
+
+    z-index: var(--_z-idx);
+}
+
+#__toastmynuts__ .__toastmynuts__toast[data-toast-state="entering"],
+#__toastmynuts__ .__toastmynuts__toast[data-toast-state="closing"] {
+    opacity: 0;
+    --_y: calc(var(--_offset) - (50% * var(--_dir_y)));
+}
+
+@media (prefers-color-scheme: dark) {
+    #__toastmynuts__ .__toastmynuts__toast {
+        --_toastmynuts-default-bg: #212121;
+        --_toastmynuts-default-fg: #fff;
+    }
+}
+
+#__toastmynuts__ .__toastmynuts__toast[data-theme="dark"] {
+    --_toastmynuts-default-bg: #212121;
+    --_toastmynuts-default-fg: #fff;
+}

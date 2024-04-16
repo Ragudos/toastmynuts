@@ -24,7 +24,7 @@
  * ```
  *
  * @typedef {Object} Toast
- * The unique ID of the toast. **This should not be altered externally.**
+ * @property {string} _id
  * @property {string} _message
  * The message displayed in the toast. **This should not be altered externally.**
  * @property {number} _duration
@@ -34,4 +34,6 @@
  * @property {AbortController[]} _controllers
  * An array of aborters this function has. They are stored, so they can destroy their
  * respective events along with the toast. **This should not be altered externally.**
+ * @property {number} _timeout
+ * The timeout id for the toast. **This should not be altered externally.**
  */
