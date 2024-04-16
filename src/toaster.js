@@ -112,7 +112,7 @@ export class Toaster {
         ] = this._createCloseBtn(toastId);
         const [
             toastElement,
-            abortController
+            toastListenersAbortController
         ] = this._createToastElement(toastId, type);
         const toastRelativeContainer = document.createElement("div");
         const messageElement = this._createMessageElement(message);
@@ -150,7 +150,7 @@ export class Toaster {
         this._toasts.push({
             _message: message,
             _type: type,
-            _controllers: [closeBtnAbortController],
+            _controllers: [closeBtnAbortController, toastListenersAbortController],
             _timeout: timeout,
             _duration: TOAST_DURATION,
             _id: toastId,
@@ -608,7 +608,15 @@ export class Toaster {
         toastElement.setAttribute("data-front-toast", "true");
 
         toastElement.addEventListener("pointerdown", (evt) => {
-            console.log(evt.currentTarget);
+            console.log(evt);
+        }, { signal: listenerAbortController.signal });
+
+        toastElement.addEventListener("pointerup", (evt) => {
+            console.log(evt);
+        }, { signal: listenerAbortController.signal });
+
+        toastElement.addEventListener("pointermove", (evt) => {
+            console.log(evt);
         }, { signal: listenerAbortController.signal });
 
         return [toastElement, listenerAbortController];
