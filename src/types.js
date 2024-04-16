@@ -15,6 +15,9 @@
  *
  * @typedef {Object} ToastConfig
  * @property {ToastPosition} [position]
+ * @property {number} maxVisibleToasts
+ * The amount of toasts visible on the screen when they
+ * are expanded. Excess toasts will be hidden.
  * @property {boolean} ignoreErrors
  * We silence thrown errors by having an empty catch block
  *```ts

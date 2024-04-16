@@ -1,10 +1,12 @@
 // @ts-check
 
-export const TOAST_DURATION = 2000;
+export const TOAST_DURATION = 60_000;
 export const TOAST_CONTAINER_ID = "__toastmynuts__";
 export const TOAST_CLASS = "__toastmynuts__toast";
 export const TOAST_MESSAGE_CLASS = "__toastmynuts__message";
+export const TOAST_CLOSE_BTN_CLASS = "__toastmynuts__close-btn";
 export const TOAST_DEFAULT_POSITION = { x: "middle", y: "top" };
+export const TOAST_MAX_VISIBLE_TOASTS = 3;
 
 export function genRandomId() {
     return Math.random().toString(16).slice(2);
@@ -215,6 +217,8 @@ export class Toaster {
      * Used when a toast is removed
      */
     _moveToastsUp(start) {
+        const maxVisibleToasts = Toaster._config?.maxVisibleToasts ?? TOAST_MAX_VISIBLE_TOASTS;
+
         for (let i = 0; i < start; ++i) {
             const toast = this._toasts[i];
 
@@ -259,6 +263,10 @@ export class Toaster {
             toastElement.style.setProperty("--_height-offset", `${heightOffset}px`);
             // -2 because we need to account for the toast that will be removed.
             toastElement.style.setProperty("--_idx", (this._toasts.length - i - 2).toString());
+
+            if (this._toasts.length - i <= maxVisibleToasts + 1) {
+                toastElement.removeAttribute("data-toast-state");
+            }
         }
     }
 
@@ -268,6 +276,8 @@ export class Toaster {
      * Used when a new toast is added
      */
     _moveToastsDown(baseHeightOffset) {
+        const maxVisibleToasts = Toaster._config?.maxVisibleToasts ?? TOAST_MAX_VISIBLE_TOASTS;
+
         for (let i = 0; i < this._toasts.length; ++i) {
             const toast = this._toasts[i];
             const toastElement = document.getElementById(toast._id);
@@ -293,6 +303,10 @@ export class Toaster {
 
             toastElement.style.setProperty("--_height-offset", `${heightOffset}px`);
             toastElement.style.setProperty("--_idx", (this._toasts.length - i).toString());
+
+            if (this._toasts.length - i >= maxVisibleToasts) {
+                toastElement.setAttribute("data-toast-state", "hidden");
+            }
         }
     }
 
@@ -366,8 +380,11 @@ export class Toaster {
     _createCloseBtn(toastId) {
         const closeBtnAbortController = new AbortController();
         const closeBtn = document.createElement("button");
-        closeBtn.textContent = "x";
-        closeBtn.classList.add("__toastmynuts__close-btn");
+
+        closeBtn.type = "button";
+        closeBtn.setAttribute("aria-label", "Close notification");
+        closeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4"><path d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z" /></svg>`;
+        closeBtn.classList.add(TOAST_CLOSE_BTN_CLASS);
 
         closeBtn.addEventListener("click", () => {
             if (Toaster._config && Toaster._config.ignoreErrors) {
