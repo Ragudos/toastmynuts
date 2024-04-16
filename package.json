@@ -9,6 +9,7 @@
   "scripts": {
     "build": "node esbuild.config.mjs",
     "prepublish": "npm run build",
+    "precommit": "npm run build && npm run docs",
     "docs": "jsdoc -c jsdoc.config.json src/index.umd.js src/index.esm.js src/types.js"
   },
   "repository": {

@@ -1,6 +1,6 @@
 // @ts-check
 
-export const TOAST_DURATION = 60_000;
+export const TOAST_DURATION = 2000;
 export const TOAST_CONTAINER_ID = "__toastmynuts__";
 export const TOAST_CLASS = "__toastmynuts__toast";
 export const TOAST_MESSAGE_CLASS = "__toastmynuts__message";
@@ -353,6 +353,7 @@ export class Toaster {
         toastElement.style.setProperty("--_z-idx", this._toasts.length.toString());
         toastElement.setAttribute("data-toast-type", type);
         toastElement.setAttribute("data-toast-state", "entering");
+        toastElement.setAttribute("aria-live", "polite");
 
         return toastElement;
     }
