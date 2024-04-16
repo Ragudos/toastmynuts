@@ -44,6 +44,10 @@
 * The message displayed in the toast. **This should not be altered externally.**
 * @property {number} _duration
 * The duration in milliseconds before a toast disappears. **This should not be altered externally.**
+* @property {number} _created_on
+* The time the toast was created. **This should not be altered externally.**
+* @property {number} _timeout_created_on
+* The time the timeout was created. **This should not be altered externally.**
 * @property {ToastType} _type
 * The type of toast to display. **This should not be altered externally.**
 * @property {AbortController[]} _controllers

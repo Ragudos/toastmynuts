@@ -9,9 +9,6 @@ import { Toaster } from "./toaster";
  * <meta name="toastmynuts-config" content="{}">
  * ```
  *
- * A config object is a JSON object that contains the following properties:
- * - {@link ToastPosition} `position` - The position of the toasts.
- *
  * @returns {ToastConfig | undefined} The config object.
  */
 function getConfig() {

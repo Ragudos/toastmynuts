@@ -142,6 +142,8 @@ export class Toaster {
         toastElement.removeAttribute("data-toast-state");
         this._moveToastsDown(packedHeight);
 
+        const dateNow = Date.now();
+
         this._toasts.push({
             _message: message,
             _type: type,
@@ -149,6 +151,8 @@ export class Toaster {
             _timeout: timeout,
             _duration: TOAST_DURATION,
             _id: toastId,
+            _created_on: dateNow,
+            _timeout_created_on: dateNow
         });
 
         return toastId;
@@ -267,14 +271,53 @@ export class Toaster {
 
     /**
      * @private
+     * Removes all timeouts in the toasts array
+     * and for each toast, changed their duration to
+     * the remaining time before they get removed.
+     * Used when expanding a stacked toast.
      */
     _removeTimeoutOfToasts() {
+        const dateNow = Date.now();
+
         for (let i = 0; i < this._toasts.length; ++i) {
             const toast = this._toasts[i];
 
             if (toast._timeout) {
+                const remainingTime = toast._duration -  (dateNow - toast._timeout_created_on);
+
+                if (remainingTime <= 0) {
+                    continue;
+                }
+
                 clearTimeout(toast._timeout);
-                this._toasts[i]._timeout = undefined;
+                toast._duration = remainingTime;
+                toast._timeout = undefined;
+            }
+        }
+    }
+
+    /**
+     * @private
+     * Adds all timeouts in the toasts array.
+     * Used when stacking an expanded stacked toast.
+     */
+    _addTimeoutToToasts() {
+        const dateNow = Date.now();
+
+        for (let i = 0; i < this._toasts.length; ++i) {
+            const toast = this._toasts[i];
+
+            if (!toast._timeout) {
+                toast._timeout_created_on = dateNow;
+                toast._timeout = setTimeout(() => {
+                    if (Toaster._config && Toaster._config.ignoreErrors) {
+                        try {
+                            this.removeToast(toast._id);
+                        } catch (_err) {}
+                    } else {
+                        this.removeToast(toast._id);
+                    }
+                }, toast._duration);
             }
         }
     }
@@ -434,6 +477,7 @@ export class Toaster {
                     }
 
                     toastContainer.setAttribute("data-expanded", "true");
+                    this._removeTimeoutOfToasts();
                 }
 
                 Toaster._toastContainerMouseLeaveListener = () => {
@@ -444,6 +488,7 @@ export class Toaster {
                         }
 
                         toastContainer.setAttribute("data-expanded", "false");
+                        this._addTimeoutToToasts();
                     }, 50);
                 };
 
@@ -457,8 +502,16 @@ export class Toaster {
                             clearTimeout(Toaster._mouseLeaveEnterListenerDebouncer);
                         }
 
-                        toastContainer.setAttribute("data-expanded", toastContainer.getAttribute("data-expanded") === "true" ? "false" : "true");
+                        const shouldExpand = toastContainer.getAttribute("data-expanded") === "false";
+
+                        toastContainer.setAttribute("data-expanded", shouldExpand ? "true" : "false");
                         toastContainer.setAttribute("data-did-toggle-expansion", "true");
+
+                        if (shouldExpand) {
+                            this._removeTimeoutOfToasts();
+                        } else {
+                            this._addTimeoutToToasts();
+                        }
                     }
                 };
 
