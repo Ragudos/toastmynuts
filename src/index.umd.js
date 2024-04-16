@@ -35,33 +35,37 @@ function getConfig() {
 const config = getConfig();
 const toast = Toaster.getInstance(config);
 
+/**
+ * @param {string} message
+ * @param {ToastType} [type]
+ */
+function create(message, type) {
+    if (config && config.ignoreErrors) {
+        try {
+            toast.addToast(message, type);
+        } catch (error) {
+            console.error(error);
+        }
+    } else {
+        toast.addToast(message, type);
+    }
+}
+
+/**
+ * @param {string} toastId
+ */
+function remove(toastId) {
+    if (config && config.ignoreErrors) {
+        try {
+            toast.removeToast(toastId);
+        } catch (error) {}
+    } else {
+        toast.removeToast(toastId);
+    }
+}
+
 // @ts-ignore
 window.ToastMyNuts = Object.freeze({
-    /**
-     * @param {string} message
-     * @param {ToastType} [type]
-     */
-    create: (message, type) => {
-        if (config && config.ignoreErrors) {
-            try {
-                toast.addToast(message, type);
-            } catch (error) {
-                console.error(error);
-            }
-        } else {
-            toast.addToast(message, type);
-        }
-    },
-    /**
-     * @param {string} toastId
-     */
-    remove: (toastId) => {
-        if (config && config.ignoreErrors) {
-            try {
-                toast.removeToast(toastId);
-            } catch (error) {}
-        } else {
-            toast.removeToast(toastId);
-        }
-    }
+    create,
+    remove
 });

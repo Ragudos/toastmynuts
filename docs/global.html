@@ -104,7 +104,183 @@
     
 
     
-    <h4 class="name" id="getConfig"><span class="type-signature"></span>getConfig<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="global.html#ToastConfig">ToastConfig</a>|undefined}</span></h4>
+    <h4 class="name" id="create"><span class="type-signature"></span>create<span class="signature">(message, type<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">ToastType</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.umd.js.html">index.umd.js</a>, <a href="index.umd.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getConfig"><span class="type-signature"></span>getConfig<span class="signature">()</span><span class="type-signature"> &rarr; {ToastConfig|undefined}</span></h4>
     
 
     
@@ -112,7 +288,8 @@
 
 
 <div class="description">
-    <p>Gets the config from</p>
+    <p>This is used internally and is not available as an external function.
+Gets the config from</p>
 <pre class="prettyprint source lang-html"><code>&lt;meta name=&quot;toastmynuts-config&quot; content=&quot;{}&quot;>
 </code></pre>
 <p>A config object is a JSON object that contains the following properties:</p>
@@ -162,7 +339,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.umd.js.html">index.umd.js</a>, <a href="index.umd.js.html#line13">line 13</a>
+        <a href="index.umd.js.html">index.umd.js</a>, <a href="index.umd.js.html#line17">line 17</a>
     </li></ul></dd>
     
 
@@ -202,7 +379,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="global.html#ToastConfig">ToastConfig</a></span>
+<span class="param-type">ToastConfig</span>
 |
 
 <span class="param-type">undefined</span>
@@ -218,6 +395,139 @@
 
 
         
+            
+
+    
+
+    
+    <h4 class="name" id="remove"><span class="type-signature"></span>remove<span class="signature">(toastId)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>toastId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.umd.js.html">index.umd.js</a>, <a href="index.umd.js.html#line57">line 57</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     
 
     
@@ -225,7 +535,7 @@
 
         
                 
-<h4 class="name" id="ToastConfig">ToastConfig</h4>
+<h4 class="name" id="Toast">Toast</h4>
 
 
 
@@ -369,6 +679,214 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>ignoreErrors</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>We silence thrown errors by having an empty catch block</p>
+<pre class="prettyprint source lang-ts"><code>try {
+ // Code that may throw an error
+} catch (_error) {}
+</code></pre></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The message displayed in the toast. <strong>This should not be altered externally.</strong></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_duration</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The duration in milliseconds before a toast disappears. <strong>This should not be altered externally.</strong></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">ToastType</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The type of toast to display. <strong>This should not be altered externally.</strong></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_controllers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;AbortController></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>An array of aborters this function has. They are stored, so they can destroy their
+respective events along with the toast. <strong>This should not be altered externally.</strong></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>_timeout</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The timeout id for the toast. <strong>This should not be altered externally.</strong></p></td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -402,7 +920,7 @@
     
     <dt class="tag-default">Default Value:</dt>
     <dd class="tag-default"><ul class="dummy">
-            <li>```json{ "x": "middle", "y": "top" }```</li>
+            <li>"neutral"What type of toast to display.</li>
         </ul></dd>
     
 
@@ -439,13 +957,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#getConfig">getConfig</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#create">create</a></li><li><a href="global.html#getConfig">getConfig</a></li><li><a href="global.html#remove">remove</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Apr 15 2024 03:23:57 GMT+0800 (Singapore Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue Apr 16 2024 16:22:10 GMT+0800 (Singapore Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
