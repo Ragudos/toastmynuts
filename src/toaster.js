@@ -1,6 +1,6 @@
 // @ts-check
 
-export const TOAST_DURATION = 60_000;
+export const TOAST_DURATION = 10_000;
 export const TOAST_CONTAINER_ID = "__toastmynuts__";
 export const TOAST_WRAPPER_ID = "__toastmynuts__wrapper";
 export const TOAST_CLASS = "__toastmynuts__toast";
