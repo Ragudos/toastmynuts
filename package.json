@@ -10,7 +10,8 @@
     "build": "node esbuild.config.mjs",
     "prepublish": "npm run build",
     "precommit": "npm run build && npm run docs",
-    "docs": "jsdoc -c jsdoc.config.json src/index.umd.js src/index.esm.js src/types.js"
+    "docs": "jsdoc -c jsdoc.config.json src/index.umd.js src/index.esm.js src/types.js",
+    "format": "prettier --write ./src/*.{css,js}"
   },
   "repository": {
     "type": "github",
@@ -34,6 +35,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "esbuild": "^0.20.2"
+    "esbuild": "^0.20.2",
+    "prettier": "^3.2.5"
   }
 }

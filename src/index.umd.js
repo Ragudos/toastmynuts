@@ -12,21 +12,21 @@ import { Toaster } from "./toaster";
  * @returns {ToastConfig | undefined} The config object.
  */
 function getConfig() {
-    const metaTag = document.querySelector("meta[name='toastmynuts:config']");
+	const metaTag = document.querySelector("meta[name='toastmynuts:config']");
 
-    if (!metaTag) {
-        return undefined;
-    }
+	if (!metaTag) {
+		return undefined;
+	}
 
-    const rawConfig = metaTag.getAttribute("content");
+	const rawConfig = metaTag.getAttribute("content");
 
-    if (rawConfig) {
-        const parsedConfig = JSON.parse(rawConfig);
+	if (rawConfig) {
+		const parsedConfig = JSON.parse(rawConfig);
 
-        return parsedConfig;
-    }
+		return parsedConfig;
+	}
 
-    return undefined;
+	return undefined;
 }
 
 const config = getConfig();
@@ -37,32 +37,32 @@ const toast = Toaster.getInstance(config);
  * @param {ToastType} [type]
  */
 function create(message, type) {
-    if (config && config.ignoreErrors) {
-        try {
-            toast.addToast(message, type);
-        } catch (error) {
-            console.error(error);
-        }
-    } else {
-        toast.addToast(message, type);
-    }
+	if (config && config.ignoreErrors) {
+		try {
+			toast.addToast(message, type);
+		} catch (error) {
+			console.error(error);
+		}
+	} else {
+		toast.addToast(message, type);
+	}
 }
 
 /**
  * @param {string} toastId
  */
 function remove(toastId) {
-    if (config && config.ignoreErrors) {
-        try {
-            toast.removeToast(toastId);
-        } catch (error) {}
-    } else {
-        toast.removeToast(toastId);
-    }
+	if (config && config.ignoreErrors) {
+		try {
+			toast.removeToast(toastId);
+		} catch (error) {}
+	} else {
+		toast.removeToast(toastId);
+	}
 }
 
 // @ts-ignore
 window.ToastMyNuts = Object.freeze({
-    create,
-    remove
+	create,
+	remove,
 });

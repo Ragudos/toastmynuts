@@ -1,226 +1,257 @@
 :where(#__toastmynuts__wrapper),
 :where(#__toastmynuts__wrapper *) {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
 }
 
 :where(#__toastmynuts__wrapper) {
-    --_gap: 16px;
+	--_gap: 16px;
 
-    position: fixed;
+	position: fixed;
 
-    width: 95%;
-    height: 95%;
+	width: 95%;
+	height: 95%;
 
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
 
-    margin: auto;
+	margin: auto;
 
-    pointer-events: none;
-    touch-action: none;
+	pointer-events: none;
+	touch-action: none;
 
-    z-index: 999;
+	z-index: 999;
 }
 
 :where(#__toastmynuts__) {
-    padding: 0;
+	padding: 0;
 
-    list-style: none;
+	list-style: none;
 }
 
 :where(#__toastmynuts__[data-position-x="left"] .__toastmynuts__toast) {
-    left: 0;
+	left: 0;
 }
 
 :where(#__toastmynuts__[data-position-x="right"] .__toastmynuts__toast) {
-    right: 0;
+	right: 0;
 }
 
 :where(#__toastmynuts__[data-position-x="middle"] .__toastmynuts__toast) {
-    left: 0;
-    right: 0;
-    margin-inline: auto;
+	left: 0;
+	right: 0;
+	margin-inline: auto;
 }
 
 :where(#__toastmynuts__[data-position-y="top"] .__toastmynuts__toast) {
-    top: 0;
-    --_dir_y: 1;
+	top: 0;
+	--_dir_y: 1;
 }
 
 :where(#__toastmynuts__[data-position-y="bottom"] .__toastmynuts__toast) {
-    bottom: 0;
-    --_dir_y: -1;
+	bottom: 0;
+	--_dir_y: -1;
 }
 
 :where(#__toastmynuts__ .__toastmynuts__toast) {
-    position: absolute;
+	position: absolute;
 
-    width: min-content;
+	width: min-content;
 
-    will-change: transform, opacity, visibility;
-    transition-property: transform, opacity, visibility;
+	will-change: transform, opacity, visibility;
+	transition-property: transform, opacity, visibility;
 
-    transform: translateX(var(--_x, 0)) translateY(var(--_y, 0)) scale(var(--_scale, 1)) rotate(var(--_rotate, 0deg));
+	transform: translateX(var(--_x, 0)) translateY(var(--_y, 0))
+		scale(var(--_scale, 1)) rotate(var(--_rotate, 0deg));
 
-    --_gap-height: calc(var(--_idx) * var(--_gap, 0px));
-    --_lift: calc(var(--_gap-height) * var(--_dir_y));
-    --_offset: calc(var(--_lift) + var(--_height-offset, 0px) * var(--_dir_y));
-    --_y: var(--_offset);
+	--_gap-height: calc(var(--_idx) * var(--_gap, 0px));
+	--_lift: calc(var(--_gap-height) * var(--_dir_y));
+	--_offset: calc(var(--_lift) + var(--_height-offset, 0px) * var(--_dir_y));
+	--_y: var(--_offset);
 
-    z-index: var(--_z-idx);
+	z-index: var(--_z-idx);
 }
 
 :where(#__toastmynuts__ .__toastmynuts__toast > div) {
-    pointer-events: all;
-    touch-action: auto;
+	pointer-events: all;
+	touch-action: auto;
 
-    width: var(--_toastmynuts-tw, min(80vw, 20rem));
-    height: var(--_initial-height, auto);
+	width: var(--_toastmynuts-tw, min(80vw, 20rem));
+	height: var(--_initial-height, auto);
 
-    display: flex;
-    gap: 1rem;
+	display: flex;
+	gap: 1rem;
 
-    position: relative;
+	position: relative;
 
-    will-change: height;
-    transition-property: height;
+	will-change: height;
+	transition-property: height;
 
-    color: var(--_toastmynuts-fg, var(--_toastmynuts-default-fg));
-    background-color: var(--_toastmynuts-bg, var(--_toastmynuts-default-bg));
+	color: var(--_toastmynuts-fg, var(--_toastmynuts-default-fg));
+	background-color: var(--_toastmynuts-bg, var(--_toastmynuts-default-bg));
 
-    border-radius: var(--_toastmynuts-br, 0.5rem);
+	border-radius: var(--_toastmynuts-br, 0.5rem);
 
-    box-shadow:
-        0px 1px 1px hsl(0 0% 0% / 0.25),
-        0px 2px 2px hsl(0 0% 0% / 0.25),
-        0px 4px 4px hsl(0 0% 0% / 0.25),
-        0px 8px 8px hsl(0 0% 0% / 0.25);
+	box-shadow:
+		0px 1px 1px hsl(0 0% 0% / 0.25),
+		0px 2px 2px hsl(0 0% 0% / 0.25),
+		0px 4px 4px hsl(0 0% 0% / 0.25),
+		0px 8px 8px hsl(0 0% 0% / 0.25);
 
-    padding: 1rem;
+	padding: 1rem;
 
-    overflow-wrap: anywhere;
+	overflow-wrap: anywhere;
 
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    user-select: none;
+	-webkit-user-drag: none;
+	-webkit-user-select: none;
+	user-select: none;
 
-    outline: none;
+	outline: none;
 
-    z-index: var(--_z-idx);
+	z-index: var(--_z-idx);
 }
 
 :where(#__toastmynuts__ .__toastmynuts__toast > div > *) {
-    will-change: opacity, visibility;
-    transition-property: opacity, visibility;
+	will-change: opacity, visibility;
+	transition-property: opacity, visibility;
 }
 
 :where(#__toastmynuts__ .__toastmynuts__toast),
 :where(#__toastmynuts__ .__toastmynuts__toast *) {
-    transition-duration: var(--_toastmynuts-td, 350ms);
-    transition-timing-function: ease;
+	transition-duration: var(--_toastmynuts-td, 350ms);
+	transition-timing-function: ease;
 }
 
 :where(#__toastmynuts__ .__toastmynuts__toast > div)::before {
-    position: absolute;
+	position: absolute;
 
-    content: "";
+	content: "";
 
-    width: 100%;
-    height: calc(var(--_gap) + 1px);
+	width: 100%;
+	height: calc(var(--_gap) + 1px);
 
-    left: 0;
+	left: 0;
 
-    bottom: 100%;
+	bottom: 100%;
 }
 
 :where(#__toastmynuts__ .__toastmynuts__toast > div .__toastmynuts__message) {
-    flex-grow: 1;
+	flex-grow: 1;
 
-    font-weight: 500;
+	font-weight: 500;
 }
 
 :where(#__toastmynuts__ .__toastmynuts__toast > div .__toastmynuts__close-btn) {
-    flex-shrink: 0;
+	flex-shrink: 0;
 
-    padding: 0.25rem;
+	padding: 0.25rem;
 
-    width: 1.5rem;
-    height: 1.5rem;
+	width: 1.5rem;
+	height: 1.5rem;
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 
-    background-color: transparent;
+	background-color: transparent;
 
-    border: none;
+	border: none;
 
-    cursor: pointer;
+	cursor: pointer;
 
-    color: var(--_toastmynuts-fg, var(--_toastmynuts-default-fg));
+	color: var(--_toastmynuts-fg, var(--_toastmynuts-default-fg));
 }
 
-:where(#__toastmynuts__ .__toastmynuts__toast > div .__toastmynuts__close-btn svg) {
-    width: 1rem;
-    height: 1rem;
+:where(
+		#__toastmynuts__
+			.__toastmynuts__toast
+			> div
+			.__toastmynuts__close-btn
+			svg
+	) {
+	width: 1rem;
+	height: 1rem;
 }
 
-:where(#__toastmynuts__[data-expanded="false"][data-stackable="true"] .__toastmynuts__toast) {
-    --_y: var(--_lift);
-    --_scale: calc(1 - var(--_idx) * 0.05);
+:where(
+		#__toastmynuts__[data-expanded="false"][data-stackable="true"]
+			.__toastmynuts__toast
+	) {
+	--_y: var(--_lift);
+	--_scale: calc(1 - var(--_idx) * 0.05);
 }
 
 :where(#__toastmynuts__ .__toastmynuts__toast[data-toast-state="entering"]),
 :where(#__toastmynuts__ .__toastmynuts__toast[data-toast-state="closing"]) {
-    --_y: calc(var(--_offset) - (100% * var(--_dir_y)));
+	--_y: calc(var(--_offset) - (100% * var(--_dir_y)));
 }
 
-:where(#__toastmynuts__[data-expanded="false"][data-stackable="true"] .__toastmynuts__toast[data-toast-state="closing"]) {
-    --_y: calc(var(--_lift) - (50% * var(--_dir_y)));
+:where(
+		#__toastmynuts__[data-expanded="false"][data-stackable="true"]
+			.__toastmynuts__toast[data-toast-state="closing"]
+	) {
+	--_y: calc(var(--_lift) - (50% * var(--_dir_y)));
 }
 
 :where(#__toastmynuts__ .__toastmynuts__toast[data-exit-swipe="true"]) {
-    --_y: calc(var(--_offset) - (100% * var(--_dir_y)) - var(--_swipe-offset, 0px))
+	--_y: calc(
+		var(--_offset) - (100% * var(--_dir_y)) - var(--_swipe-offset, 0px)
+	);
 }
 
-:where(#__toastmynuts__[data-expanded="false"][data-stackable="true"] .__toastmynuts__toast[data-exit-swipe="true"]) {
-    --_y: calc(var(--_lift) - (50% * var(--_dir_y)) - var(--_swipe-offset, 0px));
+:where(
+		#__toastmynuts__[data-expanded="false"][data-stackable="true"]
+			.__toastmynuts__toast[data-exit-swipe="true"]
+	) {
+	--_y: calc(
+		var(--_lift) - (50% * var(--_dir_y)) - var(--_swipe-offset, 0px)
+	);
 }
 
 :where(#__toastmynuts__ .__toastmynuts__toast[data-is-swiping="true"]) {
-    --_y: calc(var(--_offset) - var(--_swipe-offset, 0px));
-    transition: none;
+	--_y: calc(var(--_offset) - var(--_swipe-offset, 0px));
+	transition: none;
 }
 
-:where(:where(#__toastmynuts__[data-expanded="false"][data-stackable="true"] .__toastmynuts__toast:not([data-front-toast="true"]) > div)) {
-    height: var(--_front-toast-height, auto);
+:where(
+		:where(
+				#__toastmynuts__[data-expanded="false"][data-stackable="true"]
+					.__toastmynuts__toast:not([data-front-toast="true"])
+					> div
+			)
+	) {
+	height: var(--_front-toast-height, auto);
 }
 
 :where(#__toastmynuts__ .__toastmynuts__toast[data-toast-state="entering"]),
 :where(#__toastmynuts__ .__toastmynuts__toast[data-toast-state="hidden"]),
 :where(#__toastmynuts__ .__toastmynuts__toast[data-toast-state="closing"]),
- :where(#__toastmynuts__[data-expanded="false"][data-stackable="true"] .__toastmynuts__toast:not([data-front-toast="true"]) > div > *) {
-    opacity: 0;
-    visibility: hidden;
+:where(
+		#__toastmynuts__[data-expanded="false"][data-stackable="true"]
+			.__toastmynuts__toast:not([data-front-toast="true"])
+			> div
+			> *
+	) {
+	opacity: 0;
+	visibility: hidden;
 }
 
 :where(#__toastmynuts__ .__toastmynuts__toast) {
-    --_toastmynuts-default-bg: #fff;
-    --_toastmynuts-default-fg: #000;
+	--_toastmynuts-default-bg: #fff;
+	--_toastmynuts-default-fg: #000;
 }
 
 @media (prefers-color-scheme: dark) {
-    :where(#__toastmynuts__ .__toastmynuts__toast) {
-        --_toastmynuts-default-bg: #212121;
-        --_toastmynuts-default-fg: #fff;
-    }
+	:where(#__toastmynuts__ .__toastmynuts__toast) {
+		--_toastmynuts-default-bg: #212121;
+		--_toastmynuts-default-fg: #fff;
+	}
 }
 
 :where(#__toastmynuts__ .__toastmynuts__toast[data-theme="dark"]) {
-    --_toastmynuts-default-bg: #212121;
-    --_toastmynuts-default-fg: #fff;
+	--_toastmynuts-default-bg: #212121;
+	--_toastmynuts-default-fg: #fff;
 }
