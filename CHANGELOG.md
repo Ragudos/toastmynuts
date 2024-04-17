@@ -36,3 +36,7 @@ array of toasts.
 - Remove timeouts of toast on expand
 - Option to not stack toasts at all but still remove timeouts of toasts when the triggers for expansion are triggers.
 - Fix z-index not updating properly after micro-optimization from commit 153a71d2eae294c210689caabe1cec8237693d65
+
+# v1.1.1
+
+- Fix animation being instant on height when toasts become stacked, which causes a flick-like feeling instead of a smooth flow from one height to another.

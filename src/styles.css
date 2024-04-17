@@ -79,6 +79,7 @@
     touch-action: auto;
 
     width: var(--_toastmynuts-tw, min(80vw, 20rem));
+    height: var(--_initial-height, auto);
 
     display: flex;
     gap: 1rem;
