@@ -7,8 +7,8 @@ rank: 2
 -   Via CDN like Unpkg
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/toastmynuts@2.0.0/dist/styles.css"/>
-<script src="https://unpkg.com/toastmynuts@2.0.0/dist/index.umd.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://unpkg.com/toastmynuts@2.0.0/dist/styles.css" integrity="sha256-7eQ6VAEIduMDO57CXZFgs0BHnl2Yra0kWf189xqn+pM=" crossorigin="anonymous">
+<script src="https://unpkg.com/toastmynuts@2.0.0/dist/index.umd.js" integrity="sha256-NE6HCAqAOOVeap80K1HtFztPRJQLtkWLDIWJhxC711Q=" crossorigin="anonymous"></script>
 ```
 
 -   Via ES Modules

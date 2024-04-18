@@ -24,8 +24,8 @@ dependencies:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
   toastmynuts:
-    specifier: file:..
-    version: file:..
+    specifier: ^2.0.0
+    version: 2.0.0
 
 packages:
 
@@ -3465,6 +3465,10 @@ packages:
       is-number: 7.0.0
     dev: false
 
+  /toastmynuts@2.0.0:
+    resolution: {integrity: sha512-e/26nztwJCWUSamXXuBRX2PHxtHlyh4VIm1glBUNwNBg/mrd9RYyYMAGnmJ5TTFU/Ry7gf80pmYrWuP2y2ZH8A==}
+    dev: false
+
   /trim-lines@3.0.1:
     resolution: {integrity: sha512-kRj8B+YHZCc9kQYdWfJB2/oUl9rA99qbowYYBtr4ui4mZyAQ2JpvVBd/6U2YloATfqBhBTSMhTpgBHtU0Mf3Rg==}
     dev: false
@@ -3807,9 +3811,4 @@ packages:
 
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
-    dev: false
-
-  file:..:
-    resolution: {directory: .., type: directory}
-    name: toastmynuts
     dev: false
