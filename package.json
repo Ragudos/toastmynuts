@@ -1,41 +1,45 @@
 {
-  "name": "toastmynuts",
-  "version": "1.1.1",
-  "description": "A plug 'n use notification library for the browser.",
-  "exports": {
-    ".": "./dist/index.esm.js",
-    "./styles.css": "./dist/styles.css"
-  },
-  "scripts": {
-    "build": "node esbuild.config.mjs",
-    "prepublish": "npm run build",
-    "precommit": "npm run build && npm run docs",
-    "docs": "jsdoc -c jsdoc.config.json src/index.umd.js src/index.esm.js src/types.js",
-    "format": "prettier --write ./src/*.{css,js}"
-  },
-  "repository": {
-    "type": "github",
-    "url": "https://github.com/Ragudos/toastmynuts"
-  },
-  "bugs": {
-    "url": "https://github.com/Ragudos/toastmynuts/issues"
-  },
-  "keywords": [
-    "Notification",
-    "Toast",
-    "Browser"
-  ],
-  "author": {
-    "email": "workemailaaronragudos@gmail.com",
-    "name": "Aaron"
-  },
-  "funding": {
-    "type": "individual",
-    "url": "https://buymeacoffee.com/programmers_sanctuary"
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "esbuild": "^0.20.2",
-    "prettier": "^3.2.5"
-  }
+	"name": "toastmynuts",
+	"version": "2.0.0",
+	"description": "A plug 'n use notification library for the browser.",
+	"exports": {
+		".": "./dist/index.esm.js",
+		"./styles.css": "./dist/styles.css"
+	},
+	"types": "./dist/index.esm.d.ts",
+	"scripts": {
+		"build": "node esbuild.config.mjs && tsc",
+		"prepublish": "npm run build",
+		"precommit": "npm run build && npm run docs",
+		"format": "prettier --write ./src/*.js"
+	},
+	"repository": {
+		"type": "github",
+		"url": "https://github.com/Ragudos/toastmynuts"
+	},
+	"bugs": {
+		"url": "https://github.com/Ragudos/toastmynuts/issues"
+	},
+	"keywords": [
+		"Notification",
+		"Toast",
+		"Browser"
+	],
+	"author": {
+		"email": "workemailaaronragudos@gmail.com",
+		"name": "Aaron"
+	},
+	"funding": {
+		"type": "individual",
+		"url": "https://buymeacoffee.com/programmers_sanctuary"
+	},
+	"license": "MIT",
+	"devDependencies": {
+		"autoprefixer": "^10.4.19",
+		"esbuild": "^0.20.2",
+		"esbuild-sass-plugin": "^3.2.0",
+		"postcss": "^8.4.38",
+		"postcss-preset-env": "^9.5.5",
+		"prettier": "^3.2.5"
+	}
 }

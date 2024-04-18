@@ -1,0 +1,281 @@
+---
+import { defaultLocale } from "astro.config.mjs";
+import { getCollection } from "astro:content";
+
+const contents = await getCollection("homepage");
+const local = Astro.currentLocale || defaultLocale;
+
+const navLinks = contents
+	.filter((content) => {
+		return content.slug.split("/")[0] === local;
+	}).sort((a, b) => {
+        return a.data.rank - b.data.rank;
+    })
+	.map((content) => {
+		return {
+			title: content.slug.split("/")[1],
+			href: `#${content.slug.split("/")[1]}`,
+		};
+	});
+
+const themes = ["light", "dark", "system"];
+const iconIdPerTheme: {
+    [key: typeof themes[number]]: string;
+} = {
+	light: "outline-sun",
+	dark: "outline-moon",
+	system: "outline-computer",
+};
+---
+
+<header class="container">
+	<div>
+		<nav>
+			<ul>
+				{
+					navLinks.map((link) => {
+						return (
+							<li>
+								<a href={link.href}>{link.title}</a>
+							</li>
+						);
+					})
+				}
+			</ul>
+		</nav>
+		<details id="theme-dropdown" class="dropdown">
+			<summary>
+				<div class="sr-only">Theme dropdown</div>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					class="w-6 h-6"
+					id="theme-icon__moon"
+				>
+					<use href="/toastmynuts/icons.svg#outline-moon"></use>
+				</svg>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 0 24 24"
+					class="w-6 h-6"
+					id="theme-icon__sun"
+				>
+					<use href="/toastmynuts/icons.svg#outline-sun"></use>
+				</svg>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					class="w-6 h-6"
+					id="theme-icon__computer"
+				>
+					<use href="/toastmynuts/icons.svg#outline-computer"></use>
+				</svg>
+			</summary>
+			<div
+				class="absolute z-20 left-0 right-auto md:left-auto md:right-0 bottom-[100%]"
+			>
+				<div class="content">
+					<div class="flex flex-col gap-px">
+						<div class="p-2 font-medium">Choose a theme</div>
+						{
+							themes.map((theme) => {
+								return (
+									<button
+										class:list={[
+											"inline-flex w-full items-center gap-2",
+										]}
+										type="button"
+										value={theme}
+										name="set-theme__btn"
+									>
+										<span>{theme}</span>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											viewBox="0 0 24 24"
+											class="w-6 h-6"
+										>
+											<use
+												href={`/toastmynuts/icons.svg#${iconIdPerTheme[theme]}`}
+											/>
+										</svg>
+									</button>
+								);
+							})
+						}
+					</div>
+				</div>
+			</div>
+		</details>
+		<style>
+			#theme-dropdown summary svg {
+				display: none;
+			}
+
+			#theme-dropdown[data-current="light"] svg#theme-icon__sun,
+			#theme-dropdown[data-current="dark"] svg#theme-icon__moon,
+			#theme-dropdown[data-current="system"] svg#theme-icon__computer {
+				display: block;
+			}
+
+			#theme-dropdown[data-current="light"] button[value="light"],
+			#theme-dropdown[data-current="dark"] button[value="dark"],
+			#theme-dropdown[data-current="system"] button[value="system"] {
+				@apply bg-slate-200/20;
+			}
+		</style>
+		<script>
+			function listener(event: Event) {
+				const target = event.target;
+
+				if (
+					!(target instanceof HTMLElement) &&
+					!(target instanceof SVGElement) &&
+					!(target instanceof Element)
+				) {
+					return;
+				}
+
+				const currentlyOpenDropdown = document.querySelector(
+					"details.dropdown[open]",
+				);
+
+				if (!currentlyOpenDropdown) {
+					return;
+				}
+
+				if (!currentlyOpenDropdown.contains(target)) {
+					currentlyOpenDropdown.removeAttribute("open");
+				}
+			}
+
+			document.addEventListener("astro:before-preparation", () => {
+				document.removeEventListener("click", listener);
+			});
+
+			document.addEventListener("astro:page-load", () => {
+				document.addEventListener("click", listener);
+			});
+		</script>
+		<script>
+			import { THEME_KEY } from "@/lib/consts";
+
+			let listeners: ((evt: Event) => void)[] = [];
+
+			function setupThemeBtns() {
+				try {
+					let activeTheme = localStorage.getItem(THEME_KEY);
+
+					if (activeTheme !== "light" && activeTheme !== "dark") {
+						activeTheme = "system";
+					}
+
+					const themeDropdown =
+						document.getElementById("theme-dropdown");
+					const btns = document.querySelectorAll(
+						"button[name='set-theme__btn']",
+					) as NodeListOf<HTMLButtonElement>;
+
+					if (btns.length === 0) {
+						return;
+					}
+
+					themeDropdown?.setAttribute("data-current", activeTheme);
+
+					btns.forEach((btn) => {
+						const listener = (evt: Event) => {
+							const theme = btn.value;
+
+							themeDropdown?.setAttribute("data-current", theme);
+
+							if (theme === "system") {
+								if (
+									window.matchMedia(
+										"(prefers-color-scheme: dark)",
+									).matches
+								) {
+									document.documentElement.setAttribute(
+										"data-theme",
+										"dark",
+									);
+								} else {
+									document.documentElement.setAttribute(
+										"data-theme",
+										"light",
+									);
+								}
+							} else {
+								document.documentElement.setAttribute(
+									"data-theme",
+									theme,
+								);
+							}
+
+							localStorage.setItem(THEME_KEY, theme);
+						};
+
+						btn.addEventListener("click", listener);
+					});
+				} catch (_err) {}
+			}
+
+			document.addEventListener("astro:before-preparation", () => {
+				const btns = document.querySelectorAll(
+					"button[name='set-theme__btn']",
+				) as NodeListOf<HTMLButtonElement>;
+
+				if (btns.length === 0) {
+					return;
+				}
+
+				for (let i = 0; i < btns.length; ++i) {
+					const listener = listeners[i];
+
+					if (listener) {
+						btns[i].removeEventListener("click", listener);
+					}
+				}
+
+				listeners = [];
+			});
+
+			document.addEventListener("astro:after-swap", () => {
+				setupThemeBtns();
+			});
+
+			setupThemeBtns();
+		</script>
+	</div>
+</header>
+<style>
+	header {
+		height: 4rem;
+		background-color: hsl(var(--clr-bg));
+
+		position: sticky;
+		top: 0;
+
+		display: grid;
+		place-items: center;
+
+        border-bottom: 1px solid hsl(0 0% 50% / 0.25);
+
+        z-index: 20;
+	}
+	header > div {
+		width: 100%;
+		padding-inline: 2rem;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+	}
+
+	nav ul {
+		display: flex;
+		gap: 1rem;
+	}
+</style>

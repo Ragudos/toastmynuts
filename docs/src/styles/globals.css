@@ -1,0 +1,369 @@
+:root {
+	color-scheme: light;
+	--clr-bg: 0 0% 94%;
+	--clr-fg: 0 0% 6%;
+
+	--clr-btn-bg: 210 17% 82%;
+	--clr-btn-fg: 215 15% 15%;
+
+	--clr-primary-bg: 30 17% 82%;
+	--clr-primary-fg: 35 15% 15%;
+
+	--clr-link: 226 67% 29%;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		color-scheme: dark;
+		--clr-bg: 0 0% 6%;
+		--clr-fg: 0 0% 94%;
+
+		--clr-btn-bg: 215 15% 15%;
+		--clr-btn-fg: 210 17% 82%;
+
+		--clr-primary-bg: 35 15% 15%;
+		--clr-primary-fg: 30 17% 82%;
+
+		--clr-link: 226 58% 68%;
+	}
+}
+
+[data-theme="light"]:not(button) {
+	color-scheme: light;
+	--clr-bg: 0 0% 94%;
+	--clr-fg: 0 0% 6%;
+
+	--clr-btn-bg: 210 17% 82%;
+	--clr-btn-fg: 215 15% 15%;
+
+	--clr-primary-bg: 30 17% 82%;
+	--clr-primary-fg: 35 15% 15%;
+
+	--clr-link: 226 67% 29%;
+}
+
+[data-theme="dark"]:not(button) {
+	color-scheme: dark;
+	--clr-bg: 0 0% 6%;
+	--clr-fg: 0 0% 94%;
+
+	--clr-btn-bg: 215 15% 15%;
+	--clr-btn-fg: 210 17% 82%;
+
+	--clr-primary-bg: 35 15% 15%;
+	--clr-primary-fg: 30 17% 82%;
+
+	--clr-link: 226 58% 68%;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+	-webkit-font-smoothing: antialiased;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	font-family:
+		"Roboto",
+		system-ui,
+		-apple-system,
+		BlinkMacSystemFont,
+		"Segoe UI",
+		Roboto,
+		Oxygen,
+		Ubuntu,
+		Cantarell,
+		"Open Sans",
+		"Helvetica Neue",
+		sans-serif;
+	line-height: 1.5;
+
+	background-color: hsl(var(--clr-bg));
+	color: hsl(var(--clr-fg));
+}
+
+h1 {
+	font-size: 2.986rem;
+}
+
+h2 {
+	font-size: 2.488rem;
+}
+
+h3 {
+	font-size: 2.074rem;
+}
+
+h4 {
+	font-size: 1.728rem;
+}
+
+h5 {
+	font-size: 1.44rem;
+}
+
+h6 {
+	font-size: 1.2rem;
+}
+
+p {
+	font-size: 1rem;
+	max-width: 565px;
+}
+
+small {
+	font-size: 0.833rem;
+}
+
+section {
+	padding: 2rem;
+}
+
+button,
+input[type="submit"],
+a.btn {
+	padding: 0.75rem 1rem;
+
+	border-radius: 0.25rem;
+
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	gap: 0.5rem;
+
+	cursor: pointer;
+
+	will-change: transform, background-color, color, box-shadow, opacity;
+	transition-property: transform, background-color, color, box-shadow, opacity;
+	transition-duration: 250ms;
+	transition-timing-function: ease-in-out;
+
+	background-color: hsl(var(--clr-btn-bg) / var(--_bg-opacity, 1));
+	color: hsl(var(--clr-btn-fg) / var(--_fg-opacity, 1));
+
+	min-width: 10ch;
+	min-height: 5ch;
+}
+
+button.primary,
+input[type="submit"].primary,
+a.btn.primary {
+	background-color: hsl(var(--clr-primary-bg) / var(--_bg-opacity, 1));
+	color: hsl(var(--clr-primary-fg) / var(--_fg-opacity, 1));
+}
+
+button:hover,
+input[type="submit"]:hover,
+a.btn:hover {
+	transform: translateY(-5%);
+	--_bg-opacity: 0.87;
+}
+
+button.primary:hover,
+input[type="submit"].primary:hover,
+a.btn.primary:hover {
+	box-shadow:
+		0px 1px 1px hsl(var(--clr-primary-fg) / 0.1),
+		0px 2px 2px hsl(var(--clr-primary-fg) / 0.1),
+		0px 4px 4px hsl(var(--clr-primary-fg) / 0.1),
+		0px 8px 8px hsl(var(--clr-primary-fg) / 0.1),
+		0px 16px 16px hsl(var(--clr-primary-fg) / 0.1);
+}
+
+button i,
+input[type="submit"] i,
+a.btn i {
+	font-size: 1.25rem;
+}
+
+button svg,
+input[type="submit"] svg,
+a.btn svg {
+	width: 1.25rem;
+	height: 1.25rem;
+}
+
+.link {
+	font-weight: 700;
+}
+
+.container {
+	max-width: 1400px;
+	margin-inline: auto;
+}
+
+@media only screen and (min-width: 768px) {
+	.container {
+		padding-inline: 2rem;
+	}
+}
+
+.cta-container {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+
+	gap: 1rem;
+
+	margin-top: 1rem;
+}
+
+.markdown-content ul {
+	list-style-type: disc;
+
+	padding-left: 2rem;
+	margin-top: 2rem;
+	margin-bottom: 1rem;
+}
+
+.markdown-content ul li {
+	padding-left: 1rem;
+}
+
+.markdown-content pre {
+	padding: 1rem;
+
+	word-break: break-word;
+	overflow-wrap: break-word;
+	white-space: pre-wrap;
+
+	max-width: 100%;
+}
+
+.markdown-content p {
+	margin-top: 2rem;
+	margin-bottom: 0.5rem;
+}
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
+}
+
+.dropdown {
+	position: relative;
+}
+
+.dropdown summary {
+	background-color: hsl(var(--clr-btn-bg) / var(--_bg-opacity, 0.2));
+
+	cursor: pointer;
+
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+	padding: 0.5rem;
+	border-radius: 0.5rem;
+	justify-content: center;
+	width: 2.5rem;
+	height: 2.5rem;
+}
+
+.dropdown > div {
+	position: absolute;
+
+	z-index: 20;
+
+	left: 0;
+}
+
+.dropdown .content {
+	position: relative;
+
+	bottom: 0.25rem;
+
+	width: 10rem;
+
+	border-radius: 0.5rem;
+
+	border: 1px solid hsl(0 0% 50%);
+
+	background-color: hsl(var(--clr-bg));
+
+	box-shadow:
+		0px 1px 1px hsl(0 0% 0% / 0.1),
+		0px 2px 2px hsl(0 0% 0% / 0.1),
+		0px 4px 4px hsl(0 0% 0% / 0.1),
+		0px 8px 8px hsl(0 0% 0% / 0.1);
+}
+
+.font-medium {
+	font-weight: 500;
+}
+
+.flex {
+	display: flex;
+}
+
+.flex-col {
+	flex-direction: column;
+}
+
+.dropdown button,
+.dropdown a {
+	width: 100%;
+
+	background-color: hsl(var(--clr-btn-bg) / var(--_bg-opacity, 0));
+}
+
+.dropdown button span,
+.dropdown a span {
+	flex: 1;
+	text-align: start;
+}
+
+.dropdown button:hover,
+.dropdown a:hover {
+	--_bg-oapcity: 0.25;
+	transform: none;
+}
+
+.mb-2 {
+	margin-bottom: 0.5rem;
+}
+
+.p-2 {
+	padding: 0.5rem;
+}
+
+@media only screen and (min-width: 768px) {
+	.dropdown > div {
+		right: 0;
+		left: auto;
+	}
+}
+
+.w-6 {
+	width: 1.5rem;
+}
+
+.h-6 {
+	height: 1.5rem;
+}
+
+.dropdown summary:hover,
+.dropdown[open] summary {
+	--_bg-opacity: 0.4;
+}
+
+.gap-2 {
+	gap: 0.5rem;
+}
+
+.flex-wrap {
+	flex-wrap: wrap;
+}
+
+.items-center {
+	align-items: center;
+}

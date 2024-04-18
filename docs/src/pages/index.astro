@@ -1,0 +1,120 @@
+---
+import Header from "@/components/header.astro";
+import siteConfig from "@/data/site.json";
+import Main from "@/layouts/main.astro";
+import { defaultLocale } from "astro.config.mjs";
+import { getCollection } from "astro:content";
+
+const locale = (Astro.currentLocale ||
+	defaultLocale) as keyof typeof siteConfig.title.translations;
+const homepageContents = await getCollection("homepage");
+const heroContent = homepageContents.find((content) => {
+	const [lang, type] = content.slug.split("/");
+
+	return lang === locale && type === "hero";
+})!;
+const installationContent = homepageContents.find((content) => {
+	const [lang, type] = content.slug.split("/");
+
+	return lang === locale && type === "installation";
+})!;
+const usageContent = homepageContents.find((content) => {
+	const [lang, type] = content.slug.split("/");
+
+	return lang === locale && type === "usage";
+})!;
+const demoContent = homepageContents.find((content) => {
+	const [lang, type] = content.slug.split("/");
+
+	return lang === locale && type === "demo";
+})!;
+const aboutContent = homepageContents.find((content) => {
+	const [lang, type] = content.slug.split("/");
+
+	return lang === locale && type === "about";
+})!;
+
+const { Content: HeroContent } = await heroContent.render();
+const { Content: InstallationContent } = await installationContent.render();
+const { Content: UsageContent } = await usageContent.render();
+const { Content: DemoContent } = await demoContent.render();
+const { Content: AboutContent } = await aboutContent.render();
+---
+
+<Main>
+	<Header />
+	<main class="container">
+		<section
+			id="hero"
+			aria-labelledby="hero__title"
+			aria-describedby="hero__description"
+		>
+			<h1 id="hero__title">{heroContent.data.title}</h1>
+			<div id="hero__description">
+				<p>{heroContent.data.description}</p>
+
+				<div class="markdown-content">
+					<HeroContent />
+				</div>
+			</div>
+		</section>
+		<section
+			id="installation"
+			class="installation-section"
+			aria-labelledby="installation__title"
+			aria-describedby="installation__description"
+		>
+			<h2 id="installation__title">{installationContent.data.title}</h2>
+
+			<div id="installation__description">
+				<p>{installationContent.data.description}</p>
+
+				<div class="markdown-content">
+					<InstallationContent />
+				</div>
+			</div>
+		</section>
+		<section
+			id="usage"
+			class="usage-section"
+			aria-labelledby="usage__title"
+			aria-describedby="usage__description"
+		>
+			<h2 id="usage__title">{usageContent.data.title}</h2>
+
+			<div id="usage__description">
+				<p>{usageContent.data.description}</p>
+
+				<div class="markdown-content">
+					<UsageContent />
+				</div>
+			</div>
+		</section>
+		<section
+			id="demo"
+			class="demo-section"
+			aria-labelledby="demo__title"
+			aria-describedby="demo__description"
+		>
+			<h2 id="demo__title">{demoContent.data.title}</h2>
+			<div id="demo__description">
+				<p>{demoContent.data.description}</p>
+
+				<div class="markdown-content">
+					<DemoContent />
+				</div>
+			</div>
+		</section>
+		<section id="about" aria-labelledby="about__title" aria-describedby="about__description">
+			<h2 id="about__title">{aboutContent.data.title}</h2>
+
+			<div id="about__description">
+				<p>{aboutContent.data.description}</p>
+
+				<div class="markdown-content">
+					<AboutContent />
+				</div>
+			</div>
+		</section>
+	</main>
+</Main>

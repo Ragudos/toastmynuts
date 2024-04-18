@@ -1,29 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<!-- Tests the UMD module -->
+<!doctype html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
 
-    <link rel="stylesheet" href="../dist/styles.css" />
-    <script src="../dist/index.umd.js" defer></script>
+		<link rel="stylesheet" href="../dist/styles.css" />
+		<script src="../dist/index.umd.js" defer></script>
 
-    <meta name="toastmynuts:config" content='{"position": {"x": "right", "y": "top"}}' />
-</head>
-<body>
-    <button>Show toast</button>
-    <script>
-        const words = [
-            "hi",
-            " jfoewjifjeio jrije irjejrio jiejri jeiorji ewjiroj ioejrio jiowerjiowej",
-            "hhohohoooh"
-        ]
+		<meta
+			name="toastmynuts:config"
+			content='{"position": {"x": "middle", "y": "bottom"}, "theme": "light", "richColors": true, "stackable": false}'
+		/>
+	</head>
+	<body>
+		<button id="show">Show toast</button>
+		<button id="success">Show success</button>
+		<button id="error">Show error</button>
+		<button id="info">Show info</button>
+		<button id="warning">Show warning</button>
+		<button id="promise">Show promise</button>
+		<script>
+			const words = [
+				"hi",
+				" jfoewjifjeio jrije irjejrio jiejri jeiorji ewjiroj ioejrio jiowerjiowej jrioew jirjiweoj irjweiojr ijwer",
+				"hhohohoooh",
+			];
 
-        document.querySelector('button').addEventListener('click', function() {
-            const index = Math.floor(Math.random() * words.length);
-            const word = words[index];
-            window.ToastMyNuts.create(word);
-        });
-    </script>
-</body>
+			document
+				.querySelector("#warning")
+				.addEventListener("click", function () {
+					window.ToastMyNuts.warning("Warning!");
+				});
+
+			document
+				.querySelector("#info")
+				.addEventListener("click", function () {
+					window.ToastMyNuts.info("Info!");
+				});
+
+			document
+				.querySelector("#error")
+				.addEventListener("click", function () {
+					window.ToastMyNuts.error("Error!");
+				});
+
+			document
+				.querySelector("#success")
+				.addEventListener("click", function () {
+					window.ToastMyNuts.success("Success!");
+				});
+
+			document
+				.querySelector("#promise")
+				.addEventListener("click", async function () {
+					const [toastId, data] = await window.ToastMyNuts.promise(
+						"Loading...",
+						(data) => {
+							return data;
+						},
+						(err) => {
+							return err;
+						},
+						new Promise((resolve, reject) => {
+							setTimeout(() => {
+								resolve("hello jiorjeoj rjweior jiowejior jiower ojweiorj weiojr iowejr iojweiorj iowejiorji ");
+							}, 2_000);
+						}),
+					);
+				});
+
+			document
+				.querySelector("#show")
+				.addEventListener("click", function () {
+					const index = Math.floor(Math.random() * words.length);
+					const word = words[index];
+					window.ToastMyNuts(word, { theme: "dark", closeOnSwipe: false });
+				});
+		</script>
+	</body>
 </html>

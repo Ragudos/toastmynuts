@@ -1,0 +1,13 @@
+---
+import type { SeoProps } from '@/components/seo.astro';
+import Main from './main.astro';
+
+export type Props = SeoProps;
+
+const props = Astro.props;
+---
+
+<Main {...props}>
+    <aside></aside>
+    <main></main>
+</Main>

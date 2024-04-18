@@ -1,0 +1,14 @@
+{
+	"title": {
+		"translations": {
+			"en": "ToastMyNuts"
+		},
+		"text": "ToastMyNuts"
+	},
+	"description": {
+		"translations": {
+			"en": "A toast notification library for the browser that is butterly smooth."
+		},
+		"text": "A toast notification library for the browser that is butterly smooth."
+	}
+}

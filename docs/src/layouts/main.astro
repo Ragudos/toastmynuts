@@ -1,0 +1,170 @@
+---
+import Seo, { type SeoProps } from "../components/seo.astro";
+import { defaultLocale } from "../../astro.config.mjs";
+import { THEME_KEY } from "@/lib/consts";
+// @ts-ignore
+import { ViewTransitions } from "astro:transitions";
+import "../styles/resets.css";
+import "../styles/globals.css";
+import "toastmynuts/styles.css";
+import Header from "@/components/header.astro";
+import { Image } from "astro:assets";
+import Pfp from "@/assets/pfp.png";
+
+export type Props = SeoProps;
+
+const props = Astro.props;
+---
+
+<html lang={Astro.currentLocale || defaultLocale}>
+	<head>
+		<Fragment
+			set:html={`<script>var __THEME_KEY__ = "${THEME_KEY}"</script>`}
+		/>
+		<script is:inline>
+			(function () {
+				try {
+					const mql = window.matchMedia(
+						"(prefers-color-scheme: dark)",
+					);
+
+					function setTheme() {
+						const st = localStorage.getItem(__THEME_KEY__);
+
+						if (st === "dark" || st === "light") {
+							document.documentElement.setAttribute(
+								"data-theme",
+								st,
+							);
+						} else {
+							if (mql.matches) {
+								document.documentElement.setAttribute(
+									"data-theme",
+									"dark",
+								);
+							} else {
+								document.documentElement.setAttribute(
+									"data-theme",
+									"light",
+								);
+							}
+
+							mql.addEventListener("change", onMediaChange);
+						}
+					}
+
+					function onMediaChange(evt) {
+						try {
+							const activeTheme =
+								localStorage.getItem(__THEME_KEY__);
+
+							if (
+								activeTheme === "dark" ||
+								activeTheme === "light"
+							) {
+								return;
+							}
+
+							if (evt.matches) {
+								document.documentElement.setAttribute(
+									"data-theme",
+									"dark",
+								);
+							} else {
+								document.documentElement.setAttribute(
+									"data-theme",
+									"light",
+								);
+							}
+						} catch (_err) {}
+					}
+
+					setTheme();
+
+					document.addEventListener(
+						"astro:before-preparation",
+						() => {
+							mql.removeEventListener("change", onMediaChange);
+						},
+					);
+					document.addEventListener("astro:after-swap", setTheme);
+				} catch (_err) {
+					alert(
+						"Dark mode is not available. Please upgrade your browser to support it.",
+					);
+				}
+			})();
+		</script>
+		<meta name="charset" content="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="http-equiv" content="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
+		/>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;700&family=Roboto:wght@400;500;700&display=swap"
+			rel="stylesheet"
+		/>
+
+		<Seo {...props} />
+		<ViewTransitions />
+		<slot name="head" />
+	</head>
+	<body>
+			<slot />
+		<footer class="container">
+			<div>
+				<div class="flex gap-2 items-center">
+					<Image
+						src={Pfp}
+						width={28}
+						height={28}
+						style="border-radius: 50%"
+						alt="A picture of Aaron Ragudos"
+						format="webp"
+					/>
+
+					<small>
+						<span>
+							Made by
+						</span>
+						<a href="https://github.com/Ragudos" target="_blank" class="link">
+							Aaron.
+						</a>
+					</small>
+				</div>
+
+				<a
+					href="https://www.buymeacoffee.com/programmers_sanctuary"
+					target="_blank"
+					><img
+						src="https://img.buymeacoffee.com/button-api/?text=Buy me a book&emoji=📖&slug=programmers_sanctuary&button_colour=40DCA5&font_colour=ffffff&font_family=Inter&outline_colour=000000&coffee_colour=FFDD00"
+					/></a
+				>
+			</div>
+		</footer>
+		<style>
+			footer {
+				margin-top: 2rem;
+				border-top: 1px solid hsl(0 0% 50% / 0.25);
+			}
+
+			footer > div {
+				padding-block: 1rem;
+				padding-inline: 2rem;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 1rem;
+				flex-wrap: wrap;
+			}
+		</style>
+		<script src="../lib/render-toast"></script>
+	</body>
+</html>
