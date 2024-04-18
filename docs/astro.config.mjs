@@ -5,8 +5,7 @@ const defaultLocale = "en";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://Ragudos.github.io/toastmynuts",
-  base: "toastmynuts",
+  site: "https://toastmynuts.aaronragudos.com",
   i18n: {
     locales: ["en"],
     defaultLocale
