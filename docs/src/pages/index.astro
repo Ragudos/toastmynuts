@@ -1,8 +1,10 @@
 ---
+import ogImageFile from "@/assets/og.png";
 import Header from "@/components/header.astro";
 import siteConfig from "@/data/site.json";
 import Main from "@/layouts/main.astro";
 import { defaultLocale } from "@/lib/consts";
+import { getImage } from "astro:assets";
 import { getCollection } from "astro:content";
 
 const locale = (Astro.currentLocale ||
@@ -39,9 +41,24 @@ const { Content: InstallationContent } = await installationContent.render();
 const { Content: UsageContent } = await usageContent.render();
 const { Content: DemoContent } = await demoContent.render();
 const { Content: AboutContent } = await aboutContent.render();
+
+const ogImage = await getImage({
+	src: ogImageFile,
+	width: 1200,
+	height: 630,
+	format: "webp"
+});
 ---
 
-<Main>
+<Main og={{
+	image: {
+		alt: "Hero section of the homepage",
+		url: ogImage.src,
+		width: ogImage.options.width!,
+		height: ogImage.options.height!,
+		type: ogImage.options.format === "webp" ? "image/webp" : "image/png"
+	}
+}}>
 	<Header />
 	<main class="container">
 		<section
