@@ -273,8 +273,8 @@ a.btn svg {
 	position: absolute;
 
 	z-index: 20;
-
-	left: 0;
+ 
+ right: 0;
 }
 
 .dropdown .content {
@@ -338,8 +338,8 @@ a.btn svg {
 
 @media only screen and (min-width: 768px) {
 	.dropdown > div {
-		right: 0;
-		left: auto;
+	 left: 0;
+	 right: auto;
 	}
 }
 
