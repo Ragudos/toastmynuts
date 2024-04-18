@@ -2,7 +2,7 @@
 import Header from "@/components/header.astro";
 import siteConfig from "@/data/site.json";
 import Main from "@/layouts/main.astro";
-import { defaultLocale } from "astro.config.mjs";
+import { defaultLocale } from "@/lib/consts";
 import { getCollection } from "astro:content";
 
 const locale = (Astro.currentLocale ||
