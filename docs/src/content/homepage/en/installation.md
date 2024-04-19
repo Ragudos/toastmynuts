@@ -20,7 +20,15 @@ server side stuff. Also, there can only be one instance of a toaster, so if you 
 import { initializeToast } from "toastmynuts";
 import "toastmynuts/styles.css";
 
+// The default config
 export const toast = initializeToast({
-	// Config here. Refer to the documentation for types.
+	// maxVisibleToasts: 3,
+	// richColors: true,
+	// stackable: true,
+	// toastDuration: 10_000,
+	// dir: "rtl",
+	// theme: "system",
+	// closeOnSwipe: true,
+	// position: { x: "middle", y: "top" }
 });
 ```

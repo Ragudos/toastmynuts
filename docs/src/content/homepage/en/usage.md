@@ -46,7 +46,7 @@ toast.remove(toastId);
 
 ```ts
 try {
-	const [toastId, data] = toast.promise(
+	const [toastId, data] = await toast.promise(
 		// The loading message
 		"Loading...",
 		// The success message.
