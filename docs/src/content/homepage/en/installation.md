@@ -13,10 +13,16 @@ rank: 2
 
 -   Via ES Modules
 
+First install them using your preferred package manager as long as they can install deps from npm.
+
+```bash
+npm install toastmynuts
+```
+
 **Note**: This can only be used on the client, so please take note if you are using
 server side stuff. Also, there can only be one instance of a toaster, so if you call ```initializeToast``` again, the returned instance will be the same as the one from the very first invocation.
 
-```ts
+```tsk
 import { initializeToast } from "toastmynuts";
 import "toastmynuts/styles.css";
 
@@ -26,7 +32,7 @@ export const toast = initializeToast({
 	// richColors: true,
 	// stackable: true,
 	// toastDuration: 10_000,
-	// dir: "rtl",
+	// dir: undefined,
 	// theme: "system",
 	// closeOnSwipe: true,
 	// position: { x: "middle", y: "top" }
