@@ -22,7 +22,7 @@ npm install toastmynuts
 **Note**: This can only be used on the client, so please take note if you are using
 server side stuff. Also, there can only be one instance of a toaster, so if you call ```initializeToast``` again, the returned instance will be the same as the one from the very first invocation.
 
-```tsk
+```ts
 import { initializeToast } from "toastmynuts";
 import "toastmynuts/styles.css";
 
