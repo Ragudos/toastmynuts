@@ -36,7 +36,7 @@
 	"license": "MIT",
 	"devDependencies": {
 		"autoprefixer": "^10.4.19",
-		"esbuild": "^0.20.2",
+		"esbuild": "^0.27.0",
 		"esbuild-sass-plugin": "^3.2.0",
 		"postcss": "^8.4.38",
 		"postcss-preset-env": "^9.5.5",
